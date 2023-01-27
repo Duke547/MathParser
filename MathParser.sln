@@ -1,0 +1,87 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing", "scr\MathParsing\MathParsing.csproj", "{0FEF1811-D34E-479F-82CE-2D2492F4079F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23967D4B-B15E-4377-B3EA-409C3D97C47B} = {23967D4B-B15E-4377-B3EA-409C3D97C47B}
+		{80E673BF-127F-4E1F-ABF2-D86BECB1AA77} = {80E673BF-127F-4E1F-ABF2-D86BECB1AA77}
+		{C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98} = {C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.Testing", "scr\MathParsing\test\MathParsing.Testing.csproj", "{1AF60805-9E1B-4468-BC58-EE69109C90A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.Extensions", "scr\MathParsing.Extensions\MathParsing.Extensions.csproj", "{BA1B1899-6271-4304-BE9D-711206097D9F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.Grammars", "scr\MathParsing.Grammars\MathParsing.Grammars.csproj", "{23967D4B-B15E-4377-B3EA-409C3D97C47B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0} = {7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.Lexing", "scr\MathParsing.Lexing\MathParsing.Lexing.csproj", "{C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BA1B1899-6271-4304-BE9D-711206097D9F} = {BA1B1899-6271-4304-BE9D-711206097D9F}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.MathTree", "scr\MathParsing.MathTree\MathParsing.MathTree.csproj", "{80E673BF-127F-4E1F-ABF2-D86BECB1AA77}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0} = {7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.TreeData", "scr\MathParsing.TreeData\MathParsing.TreeData.csproj", "{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.Testing.Extensions", "scr\MathParsing.Extensions\test\MathParsing.Testing.Extensions.csproj", "{F630F2FE-52D8-4E86-8154-A216F2D05C6B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathParsing.Testing.TreeData", "scr\MathParsing.TreeData\test\MathParsing.Testing.TreeData.csproj", "{969DD897-0A0E-4FF3-9DA6-7A3098E9A763}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FEF1811-D34E-479F-82CE-2D2492F4079F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEF1811-D34E-479F-82CE-2D2492F4079F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FEF1811-D34E-479F-82CE-2D2492F4079F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FEF1811-D34E-479F-82CE-2D2492F4079F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF60805-9E1B-4468-BC58-EE69109C90A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF60805-9E1B-4468-BC58-EE69109C90A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF60805-9E1B-4468-BC58-EE69109C90A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF60805-9E1B-4468-BC58-EE69109C90A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA1B1899-6271-4304-BE9D-711206097D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA1B1899-6271-4304-BE9D-711206097D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA1B1899-6271-4304-BE9D-711206097D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA1B1899-6271-4304-BE9D-711206097D9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23967D4B-B15E-4377-B3EA-409C3D97C47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23967D4B-B15E-4377-B3EA-409C3D97C47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23967D4B-B15E-4377-B3EA-409C3D97C47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23967D4B-B15E-4377-B3EA-409C3D97C47B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C2F12D-1238-45E4-AEC1-EE4AF9D6FA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E673BF-127F-4E1F-ABF2-D86BECB1AA77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E673BF-127F-4E1F-ABF2-D86BECB1AA77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E673BF-127F-4E1F-ABF2-D86BECB1AA77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E673BF-127F-4E1F-ABF2-D86BECB1AA77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FCD68D6-2DDE-48F7-962B-434D49AEDAC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F630F2FE-52D8-4E86-8154-A216F2D05C6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F630F2FE-52D8-4E86-8154-A216F2D05C6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F630F2FE-52D8-4E86-8154-A216F2D05C6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F630F2FE-52D8-4E86-8154-A216F2D05C6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{969DD897-0A0E-4FF3-9DA6-7A3098E9A763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{969DD897-0A0E-4FF3-9DA6-7A3098E9A763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{969DD897-0A0E-4FF3-9DA6-7A3098E9A763}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{969DD897-0A0E-4FF3-9DA6-7A3098E9A763}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {845CCC45-9904-4F6F-8EEF-94C002F0492B}
+	EndGlobalSection
+EndGlobal

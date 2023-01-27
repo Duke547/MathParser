@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="test\**" />
+    <EmbeddedResource Remove="test\**" />
+    <None Remove="test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MathParsing.Grammars\MathParsing.Grammars.csproj" />
+    <ProjectReference Include="..\MathParsing.Lexing\MathParsing.Lexing.csproj" />
+    <ProjectReference Include="..\MathParsing.MathTree\MathParsing.MathTree.csproj" />
+  </ItemGroup>
+</Project>

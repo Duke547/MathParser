@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MathParsing.Extensions\MathParsing.Extensions.csproj" />
+    <ProjectReference Include="..\MathParsing.Lexing\MathParsing.Lexing.csproj" />
+    <ProjectReference Include="..\MathParsing.TreeData\MathParsing.TreeData.csproj" />
+  </ItemGroup>
+</Project>
