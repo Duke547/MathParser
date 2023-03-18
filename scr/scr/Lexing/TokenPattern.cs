@@ -1,4 +1,6 @@
-﻿namespace MathParsing.Lexing;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace MathParsing.Lexing;
 
 public sealed record TokenPattern
 {
@@ -6,6 +8,7 @@ public sealed record TokenPattern
 
     public string Pattern { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     public override string? ToString() => Description;
 
     public TokenPattern(string type, string pattern)
