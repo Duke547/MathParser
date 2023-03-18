@@ -5,17 +5,18 @@ namespace MathParsing.Lexing;
 
 public static class Lexer
 {
-    private static Token? ConsumeNextToken(ref string expression, IEnumerable<TokenPattern> tokenPatterns)
+    static Token? ConsumeNextToken(ref string expression, IEnumerable<TokenPattern> tokenPatterns)
     {
         foreach (var tokenPattern in tokenPatterns)
         {
-            var match = Regex.Match(expression, tokenPattern.Pattern);
+            var whitespacePattern = @"\s*";
+            var match = Regex.Match(expression, $"{whitespacePattern}{tokenPattern.Pattern}{whitespacePattern}");
 
             if (match.Success && match.Index == 0)
             {
                 expression = expression.Substring(match.Length);
 
-                return new Token(tokenPattern.Description, match.Value);
+                return new Token(tokenPattern.Description, match.Value.RemoveWhitespace());
             }
         }
 
@@ -25,7 +26,6 @@ public static class Lexer
     public static Token[] Tokenize(string expression, IEnumerable<TokenPattern> tokenPatterns)
     {
         var tokens = new List<Token>();
-        expression = expression.RemoveWhitespace();
 
         while (expression.Length > 0)
         {
@@ -33,9 +33,8 @@ public static class Lexer
 
             if (token != null)
                 tokens.Add(token);
-            
-            else if (token == null && expression.Length > 0)
-                throw new InvalidOperationException($"Unrecognized pattern at ^{expression}");
+            else
+                throw new ArgumentException($"Urecognized symbol at '{expression}'");
         }
 
         return tokens.ToArray();
