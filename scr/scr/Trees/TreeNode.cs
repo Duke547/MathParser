@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MathParsing.TreeData;
+namespace MathParsing.Trees;
 
 public class TreeNode<T>
 {

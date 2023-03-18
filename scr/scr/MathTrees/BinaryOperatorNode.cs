@@ -1,4 +1,4 @@
-﻿namespace MathParsing.MathTree;
+﻿namespace MathParsing.MathTrees;
 
 public sealed class BinaryOperatorNode : MathTreeNode
 {

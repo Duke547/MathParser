@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MathParsing.csproj" />
+    <ProjectReference Include="..\scr\MathParsing.csproj" />
   </ItemGroup>
 
 </Project>

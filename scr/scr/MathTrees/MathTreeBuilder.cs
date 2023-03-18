@@ -1,6 +1,6 @@
 ﻿using MathParsing.Grammars;
 
-namespace MathParsing.MathTree;
+namespace MathParsing.MathTrees;
 
 public sealed class MathTreeBuilder
 {

@@ -1,6 +1,6 @@
 ﻿using MathParsing.Grammars;
 using MathParsing.Lexing;
-using MathParsing.MathTree;
+using MathParsing.MathTrees;
 
 namespace MathParsing;
 

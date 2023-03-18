@@ -1,7 +1,7 @@
-﻿using MathParsing.TreeData;
+﻿using MathParsing.Trees;
 using NUnit.Framework;
 
-namespace MathParsing.Testing.TreeData;
+namespace MathParsing.Testing.Trees;
 
 public class BinaryTreeNodeTests
 {

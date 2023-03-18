@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using MathParsing.Lexing;
-using MathParsing.TreeData;
+using MathParsing.Trees;
 
 namespace MathParsing.Grammars;
 

@@ -1,4 +1,4 @@
-﻿namespace MathParsing.TreeData;
+﻿namespace MathParsing.Trees;
 
 public sealed class LeafTreeNode<T> : TreeNode<T>
 {

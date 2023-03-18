@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
-using MathParsing.TreeData;
+using MathParsing.Trees;
 
-namespace MathParsing.MathTree;
+namespace MathParsing.MathTrees;
 
 public abstract class MathTreeNode
 {
