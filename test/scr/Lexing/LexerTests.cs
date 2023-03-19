@@ -36,7 +36,7 @@ public class LexerTests
         };
 
         var expression      = "1 + 2";
-        var expectedMessage = "Urecognized symbol at '+ 2'";
+        var expectedMessage = "Unrecognized symbol at '+ 2'";
 
         Assert.That(() => Lexer.Tokenize(expression, patterns), Throws.ArgumentException.With.Message.EqualTo(expectedMessage));
     }

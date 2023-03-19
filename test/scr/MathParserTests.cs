@@ -18,6 +18,6 @@ public class MathParserTests
     {
         var expression = "1 + 1 &";
 
-        Assert.That(() => Parser.Parse(expression), Throws.InvalidOperationException.With.Message.EqualTo("Unrecognized pattern at ^&"));
+        Assert.That(() => Parser.Parse(expression), Throws.ArgumentException.With.Message.EqualTo("Unrecognized symbol at '&'"));
     }
 }

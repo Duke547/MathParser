@@ -34,7 +34,7 @@ public static class Lexer
             if (token != null)
                 tokens.Add(token);
             else
-                throw new ArgumentException($"Urecognized symbol at '{expression}'");
+                throw new ArgumentException($"Unrecognized symbol at '{expression}'");
         }
 
         return tokens.ToArray();
