@@ -6,19 +6,24 @@ public sealed class GrammarTreeBuilder
 {
     public Grammar Grammar { get; }
 
-    Stack<Token> RemainingTokens { get; set; } = new();
-
-    GrammarTreeNode? LastTerminalNode { get; set; } = default;
+    Token[]          _tokens                    = Array.Empty<Token>();
+    Stack<Token>     _remainingTokens           = new();
+    GrammarTreeNode? _lastTerminalNode          = null;
+    int              _furthestTokenIndexReached = -1;
 
     bool BuildFromTerminal(GrammarTreeNode tree)
     {
-        if (RemainingTokens.Count > 0 && RemainingTokens.First().Description == tree.Symbol.Description)
+        if (_remainingTokens.First().Description == tree.Symbol.Description)
         {
-            var token = RemainingTokens.Pop();
-            
+            var token      = _remainingTokens.Pop();
+            var tokenIndex = Array.IndexOf(_tokens, token);
+
             tree.Token = token;
 
-            LastTerminalNode = tree;
+            _lastTerminalNode = tree;
+            
+            if (tokenIndex > _furthestTokenIndexReached)
+                _furthestTokenIndexReached = tokenIndex;
 
             return true;
         }
@@ -40,7 +45,7 @@ public sealed class GrammarTreeBuilder
                 rule = null;
         }
 
-        if (rule is null || rule.Replacement.Count > RemainingTokens.Count)
+        if (rule is null || rule.Replacement.Count > _remainingTokens.Count)
             return false;
 
         foreach (var replacement in rule.Replacement)
@@ -63,7 +68,7 @@ public sealed class GrammarTreeBuilder
     void Discard(GrammarTreeNode tree)
     {
         if (tree.Symbol.Terminal)
-            RemainingTokens.Push(tree.Token!);
+            _remainingTokens.Push(tree.Token!);
 
         tree.Remove();
     }
@@ -82,24 +87,35 @@ public sealed class GrammarTreeBuilder
             return BuildFromNonterminal(tree);
     }
 
+    void HandleFailure()
+    {
+        if (_furthestTokenIndexReached > -1)
+        {
+            var unexpectedToken = _tokens[_furthestTokenIndexReached + 1];
+
+            throw new ArgumentException($"Unexpected token '{unexpectedToken}'.");
+        }
+    }
+
     public GrammarTreeNode Build(IEnumerable<Token> tokens)
     {
-        RemainingTokens = new(tokens);
+        _tokens          = tokens.ToArray();
+        _remainingTokens = new(tokens.Reverse());
 
         var tree   = new GrammarTreeNode(Grammar.Start, Grammar.Rules);
         var result = Build(tree);
 
-        while (result && RemainingTokens.Count > 0)
+        while (result && _remainingTokens.Count > 0)
         {
-            var lastTerminalParent = LastTerminalNode!.Parent!;
+            var lastTerminalParent = _lastTerminalNode!.Parent!;
 
-            Discard(LastTerminalNode);
+            Discard(_lastTerminalNode);
 
             result = Build(lastTerminalParent);
         }
 
         if (!result)
-            throw new InvalidOperationException($"Unexpected token {RemainingTokens.First()}.");
+            HandleFailure();
 
         return tree;
     }

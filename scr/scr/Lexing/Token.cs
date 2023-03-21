@@ -9,7 +9,7 @@ public sealed record Token
     public string Text { get; private set; }
 
     [ExcludeFromCodeCoverage]
-    public override string? ToString() => $"{Text} ({Description})";
+    public override string? ToString() => $"{Text}";
 
     public Token(string description, string text)
     {
