@@ -2,9 +2,9 @@
 
 namespace MathParsing.Grammars;
 
-public sealed record Grammar
+public record struct Grammar
 {
-    public GrammarSymbol Start{ get; }
+    public GrammarSymbol Start { get; }
 
     public ImmutableList<ProductionRule> Rules { get; }
 
