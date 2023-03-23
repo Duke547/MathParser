@@ -5,29 +5,22 @@ namespace MathParsing.MathTrees;
 
 public abstract class MathTreeNode
 {
-    readonly TreeNode<MathTreeNode> _treeNode;
+    protected TreeNode<MathTreeNode> TreeNode { get; set; }
 
-    public MathTreeNode? Parent => _treeNode
+    public MathTreeNode? Parent => TreeNode
         .Parent?.Value;
 
-    public ImmutableList<MathTreeNode> Children => _treeNode.Children
+    public ImmutableList<MathTreeNode> Children => TreeNode.Children
         .Select(c => c.Value)
         .ToImmutableList();
 
-    public MathTreeNode Root => _treeNode.Root.Value;
+    public MathTreeNode Root => TreeNode.Root.Value;
 
     public abstract decimal Value { get; }
 
-    public abstract bool Open { get; }
-
     public virtual void AddChild(MathTreeNode child)
-    {
-        if (!Open)
-            throw new InvalidOperationException("This node cannot have anymore children.");
-        else
-            _treeNode.AddChild(child._treeNode);
-    }
+        => TreeNode.AddChild(child.TreeNode);
 
     public MathTreeNode() =>
-        _treeNode = new(this);
+        TreeNode = new(this);
 }

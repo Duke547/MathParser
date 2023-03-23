@@ -1,4 +1,6 @@
-﻿namespace MathParsing.MathTrees;
+﻿using MathParsing.Trees;
+
+namespace MathParsing.MathTrees;
 
 public sealed class NumberNode : MathTreeNode
 {
@@ -6,8 +8,10 @@ public sealed class NumberNode : MathTreeNode
 
     public override decimal Value => _value;
 
-    public override bool Open => false;
-
     public NumberNode(decimal value)
-        => _value = value;
+    {
+        _value = value;
+
+        TreeNode = new LeafTreeNode<MathTreeNode>(this);
+    }
 }

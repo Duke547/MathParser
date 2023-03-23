@@ -2,7 +2,8 @@
 
 namespace MathParsing.MathTrees;
 
-public sealed class MathTreeBuilder
+// TODO: Rename to MathTreeConverter
+public static class MathTreeBuilder
 {
     static NumberNode ConvertToNumberNode(GrammarTreeNode grammarNode)
     {
@@ -25,7 +26,7 @@ public sealed class MathTreeBuilder
         return new(symbol, operation);
     }
 
-    public static MathTreeNode ConvertToMathNode(GrammarTreeNode grammarTree)
+    static MathTreeNode ConvertToMathNode(GrammarTreeNode grammarTree)
     {
         var description = grammarTree.Symbol.Description;
 
