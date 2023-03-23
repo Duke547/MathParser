@@ -10,16 +10,16 @@ public class GrammarTreeBuilderTests
 
     static Grammar DefineGrammar()
     {
-        var expression      = new GrammarSymbol("expression",       false);
-        var binaryOperation = new GrammarSymbol("binary operation", false);
-        var number          = new GrammarSymbol("number",           true );
-        var addition        = new GrammarSymbol("addition",         true );
+        var expression      = new NonterminalSymbol("expression"      );
+        var binaryOperation = new NonterminalSymbol("binary operation");
+        var number          = new TerminalSymbol   ("number"          );
+        var addition        = new TerminalSymbol   ("addition"        );
 
         var rules = new ProductionRule[]
         {
-            new(binaryOperation, new[] { expression, addition, expression }),
-            new(expression,      new[] { binaryOperation                  }),
-            new(expression,      new[] { number                           })
+            new(binaryOperation, new GrammarSymbol[] { expression, addition, expression }),
+            new(expression,      new GrammarSymbol[] { binaryOperation                  }),
+            new(expression,      new GrammarSymbol[] { number                           })
         };
 
         return new(expression, rules);

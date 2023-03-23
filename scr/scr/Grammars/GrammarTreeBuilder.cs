@@ -83,7 +83,7 @@ public sealed class GrammarTreeBuilder
 
     void Discard(GrammarTreeNode tree)
     {
-        if (tree.Symbol.Terminal)
+        if (tree.Symbol is TerminalSymbol)
             _remainingTokens.Push(tree.Token!);
 
         tree.Remove();
@@ -97,7 +97,7 @@ public sealed class GrammarTreeBuilder
 
     bool Build(GrammarTreeNode tree)
     {
-        if (tree.Symbol.Terminal)
+        if (tree.Symbol is TerminalSymbol)
             return BuildFromTerminal(tree);
         else
             return BuildFromNonterminal(tree);
