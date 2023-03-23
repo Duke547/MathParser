@@ -6,11 +6,11 @@ public record struct Grammar
 {
     public NonterminalSymbol Start{ get; }
 
-    public ImmutableList<ProductionRule> Rules { get; }
+    public List<ProductionRule> Rules { get; set; }
 
     public Grammar(NonterminalSymbol start, IEnumerable<ProductionRule> rules)
     {
         Start = start;
-        Rules = rules.ToImmutableList();
+        Rules = rules.ToList();
     }
 }

@@ -66,7 +66,43 @@ public class GrammarTreeBuilderTests
     }
 
     [Test]
-    public void Build_Invalid_ExtraToken_Test()
+    public void Build_ReverseGrammarRules_Test()
+    {
+        _builder.Grammar.Rules.Reverse();
+
+        var tokens = new Token[]
+        {
+            new("number",   "1"),
+            new("addition", "+"),
+            new("number",   "2"),
+            new("addition", "+"),
+            new("number",   "3")
+        };
+
+        var tree = _builder.Build(tokens);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(tree                                                            .Symbol.Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0]                                                .Symbol.Description, Is.EqualTo("binary operation"));
+            Assert.That(tree.Children[0].Children[0]                                    .Symbol.Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[0].Children[0]                        .Symbol.Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[0].Children[0]                        .Text,               Is.EqualTo("1"               ));
+            Assert.That(tree.Children[0].Children[1]                                    .Symbol.Description, Is.EqualTo("addition"        ));
+            Assert.That(tree.Children[0].Children[2]                                    .Symbol.Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0]                        .Symbol.Description, Is.EqualTo("binary operation"));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0]            .Symbol.Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Symbol.Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Text,               Is.EqualTo("2"               ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[1]            .Symbol.Description, Is.EqualTo("addition"        ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2]            .Symbol.Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Symbol.Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Text,               Is.EqualTo("3"               ));
+        });
+    }
+
+    [Test]
+    public void Build_ExtraToken_Test()
     {
         var tokens = new Token[]
         {
@@ -80,7 +116,7 @@ public class GrammarTreeBuilderTests
     }
 
     [Test]
-    public void Build_Invalid_UnknownToken_Test()
+    public void Build_UnknownToken_Test()
     {
         var tokens = new Token[]
         {
@@ -93,10 +129,26 @@ public class GrammarTreeBuilderTests
     }
 
     [Test]
-    public void Build_Invalid_Empty_Test()
+    public void Build_NoTokens_Test()
     {
         var tokens = Array.Empty<Token>();
 
         Assert.That(() => _builder.Build(tokens), Throws.Nothing);
+    }
+
+    [Test]
+    public void Build_NoRules_Test()
+    {
+        var tokens = new Token[]
+        {
+            new("number",      "1"),
+            new("subtraction", "-"),
+            new("number",      "2"),
+        };
+
+        _builder.Grammar.Rules.Clear();
+
+        Assert.That(() => _builder.Build(tokens), Throws.InvalidOperationException
+            .With.Message.EqualTo("The associated grammar does not define any production rules."));
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using MathParsing.Lexing;
 using MathParsing.Trees;
 
@@ -10,23 +11,24 @@ public sealed class GrammarTreeNode
 
     public GrammarSymbol Symbol { get; private set; }
 
-    internal Token? Token { get; set; }
+    public Token? Token { get; set; }
 
     internal Queue<ProductionRule> RemainingRules { get; private set; }
 
-    public string Text => Token?.Text ?? "";
+    public string Text => Token?.Text ?? Symbol.Description;
 
     public GrammarTreeNode? Parent
-        => _treeNode.Parent?.Value as GrammarTreeNode;
+        => _treeNode.Parent?.Value;
 
     public ImmutableList<GrammarTreeNode> Children
-        => _treeNode.Children.Select(c => (c.Value as GrammarTreeNode)!).ToImmutableList();
+        => _treeNode.Children.Select(c => c.Value).ToImmutableList();
 
     public void AddChild(GrammarTreeNode child)
         => _treeNode.AddChild(child._treeNode);
 
     public void Remove() => _treeNode.Remove();
 
+    [ExcludeFromCodeCoverage]
     public override string? ToString() => $"{Symbol} ({Children.Count})";
 
     public GrammarTreeNode(GrammarSymbol symbol, IEnumerable<ProductionRule> rules)
