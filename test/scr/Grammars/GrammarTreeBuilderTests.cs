@@ -17,9 +17,9 @@ public class GrammarTreeBuilderTests
 
         var rules = new ProductionRule[]
         {
-            new(expression,      new[] { number                           }),
+            new(binaryOperation, new[] { expression, addition, expression }),
             new(expression,      new[] { binaryOperation                  }),
-            new(binaryOperation, new[] { expression, addition, expression })
+            new(expression,      new[] { number                           })
         };
 
         return new(expression, rules);

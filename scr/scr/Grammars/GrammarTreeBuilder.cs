@@ -6,10 +6,30 @@ public sealed class GrammarTreeBuilder
 {
     public Grammar Grammar { get; }
 
-    Token[]          _tokens                    = Array.Empty<Token>();
-    Stack<Token>     _remainingTokens           = new();
-    GrammarTreeNode? _lastTerminalNode          = null;
-    int              _furthestTokenIndexReached = -1;
+    Token[]               _tokens                    = Array.Empty<Token>();
+    Stack<Token>          _remainingTokens           = new();
+    GrammarTreeNode?      _lastTerminalNode          = null;
+    int                   _furthestTokenIndexReached = -1;
+    int                   _subsequentNonTerminals    = 0;
+    
+    readonly int _maxSubsequentNonTerminals = 3;
+
+    static ProductionRule? GetNextProductionRule(GrammarTreeNode tree)
+    {
+        ProductionRule? rule = null;
+
+        while (tree.RemainingRules.Count > 0)
+        {
+            rule = tree.RemainingRules.Dequeue();
+
+            if (rule.Nonterminal == tree.Symbol)
+                break;
+            else
+                rule = null;
+        }
+
+        return rule;
+    }
 
     bool BuildFromTerminal(GrammarTreeNode tree)
     {
@@ -25,6 +45,8 @@ public sealed class GrammarTreeBuilder
             if (tokenIndex > _furthestTokenIndexReached)
                 _furthestTokenIndexReached = tokenIndex;
 
+            _subsequentNonTerminals = 0;
+
             return true;
         }
 
@@ -33,20 +55,12 @@ public sealed class GrammarTreeBuilder
 
     bool BuildFromNonterminal(GrammarTreeNode tree)
     {
-        ProductionRule? rule = default;
+        var rule = GetNextProductionRule(tree);
 
-        while (tree.RemainingRules.Count > 0)
-        {
-            rule = tree.RemainingRules.Dequeue();
-
-            if (rule.Nonterminal == tree.Symbol)
-                break;
-            else
-                rule = null;
-        }
-
-        if (rule is null || rule.Replacement.Count > _remainingTokens.Count)
+        if (rule is null || rule.Replacement.Count > _remainingTokens.Count || _subsequentNonTerminals > _maxSubsequentNonTerminals)
             return false;
+
+        _subsequentNonTerminals++;
 
         foreach (var replacement in rule.Replacement)
         {
@@ -55,6 +69,8 @@ public sealed class GrammarTreeBuilder
             if (!Build(child))
             {
                 DiscardChildren(tree);
+
+                _subsequentNonTerminals--;
 
                 return BuildFromNonterminal(tree);
             }
