@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using MathParsing.Extensions;
 
 namespace MathParsing.Grammars;
@@ -9,6 +10,7 @@ public sealed record ProductionRule
 
     public ImmutableList<GrammarSymbol> Replacement { get; private set; }
 
+    [ExcludeFromCodeCoverage]
     public override string? ToString()
         => $"{Nonterminal} -> {StringExt.FromList(Replacement)}";
 
