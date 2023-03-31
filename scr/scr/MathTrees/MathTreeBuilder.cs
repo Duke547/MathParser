@@ -12,8 +12,11 @@ public static class MathTreeBuilder
         return new(number);
     }
 
-    static Func<decimal, decimal, decimal> ConvertToBinaryOperation(string description)
-        => (l, r) => l + r;
+    static Func<decimal, decimal, decimal> ConvertToBinaryOperation(string description) => description switch
+    {
+        "addition" => (l, r) => l + r,
+        _          => (l, r) => l * r,
+    };
 
     static BinaryOperatorNode ConvertToBinaryOperatorNode(GrammarTreeNode grammarNode)
     {

@@ -12,12 +12,14 @@ public static class Parser
         var binaryOperation = new NonterminalSymbol("binary operation");
         var number          = new TerminalSymbol   ("number"          );
         var addition        = new TerminalSymbol   ("addition"        );
+        var multiplication  = new TerminalSymbol   ("multiplication"  );
 
         var rules = new ProductionRule[]
         {
             new(expression,      new GrammarSymbol[] { number }),
             new(expression,      new GrammarSymbol[] { binaryOperation }),
-            new(binaryOperation, new GrammarSymbol[] { expression, addition, expression })
+            new(binaryOperation, new GrammarSymbol[] { expression, addition, expression }),
+            new(binaryOperation, new GrammarSymbol[] { expression, multiplication, expression })
         };
 
         return new(expression, rules);

@@ -6,11 +6,12 @@ public sealed class GrammarTreeBuilder
 {
     public Grammar Grammar { get; }
 
-    Token[]          _tokens                    = Array.Empty<Token>();
-    Stack<Token>     _remainingTokens           = new();
-    GrammarTreeNode? _lastNonTerminalNode       = null;
-    int              _furthestTokenIndexReached = -1;
-    int              _subsequentNonTerminals    = 0;
+    readonly Stack<GrammarTreeNode> _processedNonterminalNodes = new();
+
+    Token[]                _tokens                    = Array.Empty<Token>();
+    Stack<Token>           _remainingTokens           = new();
+    int                    _furthestTokenIndexReached = -1;
+    int                    _subsequentNonTerminals    = 0;
     
     public int MaxSubsequentNonTerminals { get; set; } = 3;
 
@@ -85,10 +86,9 @@ public sealed class GrammarTreeBuilder
 
     bool Build(GrammarTreeNode tree)
     {
-        var previousLastNonTerminalNode = _lastNonTerminalNode;
-
         _subsequentNonTerminals += 1;
-        _lastNonTerminalNode     = tree;
+
+        _processedNonterminalNodes.Push(tree);
 
         while (true)
         {
@@ -97,7 +97,8 @@ public sealed class GrammarTreeBuilder
             if (rule is null)
             {
                 _subsequentNonTerminals--;
-                _lastNonTerminalNode = previousLastNonTerminalNode;
+                _processedNonterminalNodes.Pop();
+
                 return false;
             }
 
@@ -137,7 +138,10 @@ public sealed class GrammarTreeBuilder
     void DiscardChildren(GrammarTreeNode tree)
     {
         foreach (var child in tree.Children.Reverse())
+        {
+            DiscardChildren(child);
             Discard(child);
+        }
     }
 
     void HandleFailure()
@@ -166,16 +170,16 @@ public sealed class GrammarTreeBuilder
 
         while (_remainingTokens.Count > 0)
         {
-            DiscardChildren(_lastNonTerminalNode!);
+            var lastNonterminalNode = _processedNonterminalNodes.Pop();
 
-            var result = Build(_lastNonTerminalNode!);
+            DiscardChildren(lastNonterminalNode);
+
+            var result = Build(lastNonterminalNode);
             
             if (!result)
             {
-                if (_lastNonTerminalNode!.Parent is null)
+                if (_processedNonterminalNodes.Count == 0)
                     HandleFailure();
-
-                _lastNonTerminalNode = _lastNonTerminalNode.Parent;
             }
         }
 
