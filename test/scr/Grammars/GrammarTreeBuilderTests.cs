@@ -47,21 +47,21 @@ public class GrammarTreeBuilderTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(tree                                                            .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0]                                                .Symbol.Description, Is.EqualTo("binary operation"));
-            Assert.That(tree.Children[0].Children[0]                                    .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[0].Children[0]                        .Symbol.Description, Is.EqualTo("number"          ));
-            Assert.That(tree.Children[0].Children[0].Children[0]                        .Text,               Is.EqualTo("1"               ));
-            Assert.That(tree.Children[0].Children[1]                                    .Symbol.Description, Is.EqualTo("addition"        ));
-            Assert.That(tree.Children[0].Children[2]                                    .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[2].Children[0]                        .Symbol.Description, Is.EqualTo("binary operation"));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[0]            .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Symbol.Description, Is.EqualTo("number"          ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Text,               Is.EqualTo("2"               ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[1]            .Symbol.Description, Is.EqualTo("addition"        ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[2]            .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Symbol.Description, Is.EqualTo("number"          ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Text,               Is.EqualTo("3"               ));
+            Assert.That(tree                                                            .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0]                                                .Description, Is.EqualTo("binary operation"));
+            Assert.That(tree.Children[0].Children[0]                                    .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[0].Children[0]                        .Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[0].Children[0]                        .Text,        Is.EqualTo("1"               ));
+            Assert.That(tree.Children[0].Children[1]                                    .Description, Is.EqualTo("addition"        ));
+            Assert.That(tree.Children[0].Children[2]                                    .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0]                        .Description, Is.EqualTo("binary operation"));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0]            .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Text,        Is.EqualTo("2"               ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[1]            .Description, Is.EqualTo("addition"        ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2]            .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Text,        Is.EqualTo("3"               ));
         });
     }
 
@@ -83,21 +83,21 @@ public class GrammarTreeBuilderTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(tree                                                            .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0]                                                .Symbol.Description, Is.EqualTo("binary operation"));
-            Assert.That(tree.Children[0].Children[0]                                    .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[0].Children[0]                        .Symbol.Description, Is.EqualTo("number"          ));
-            Assert.That(tree.Children[0].Children[0].Children[0]                        .Text,               Is.EqualTo("1"               ));
-            Assert.That(tree.Children[0].Children[1]                                    .Symbol.Description, Is.EqualTo("addition"        ));
-            Assert.That(tree.Children[0].Children[2]                                    .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[2].Children[0]                        .Symbol.Description, Is.EqualTo("binary operation"));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[0]            .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Symbol.Description, Is.EqualTo("number"          ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Text,               Is.EqualTo("2"               ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[1]            .Symbol.Description, Is.EqualTo("addition"        ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[2]            .Symbol.Description, Is.EqualTo("expression"      ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Symbol.Description, Is.EqualTo("number"          ));
-            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Text,               Is.EqualTo("3"               ));
+            Assert.That(tree                                                            .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0]                                                .Description, Is.EqualTo("binary operation"));
+            Assert.That(tree.Children[0].Children[0]                                    .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[0].Children[0]                        .Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[0].Children[0]                        .Text,        Is.EqualTo("1"               ));
+            Assert.That(tree.Children[0].Children[1]                                    .Description, Is.EqualTo("addition"        ));
+            Assert.That(tree.Children[0].Children[2]                                    .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0]                        .Description, Is.EqualTo("binary operation"));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0]            .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[0].Children[0].Text,        Is.EqualTo("2"               ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[1]            .Description, Is.EqualTo("addition"        ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2]            .Description, Is.EqualTo("expression"      ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Description, Is.EqualTo("number"          ));
+            Assert.That(tree.Children[0].Children[2].Children[0].Children[2].Children[0].Text,        Is.EqualTo("3"               ));
         });
     }
 

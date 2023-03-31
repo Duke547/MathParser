@@ -2,11 +2,12 @@
 
 namespace MathParsing.MathTrees;
 
+// TODO: Test invalid grammar tree nodes.
 public static class MathTreeConverter
 {
-    static NumberNode ConvertToNumberNode(GrammarTreeNode grammarNode)
+    static NumberNode ConvertToNumberNode(TerminalNode terminalNode)
     {
-        var number = decimal.Parse(grammarNode.Text);
+        var number = decimal.Parse(terminalNode.Token.Text);
 
         return new(number);
     }
@@ -17,31 +18,34 @@ public static class MathTreeConverter
         _          => (l, r) => l * r,
     };
 
-    static BinaryOperatorNode ConvertToBinaryOperatorNode(GrammarTreeNode grammarNode)
+    static BinaryOperatorNode ConvertToBinaryOperatorNode(NonterminalNode nonterminalNode)
     {
-        var operatorChild = grammarNode.Children[1];
-        var symbol        = operatorChild.Text;
-        var operation     = ConvertToBinaryOperation(operatorChild.Symbol.Description);
+        var operatorChild = (nonterminalNode.Children[1] as TerminalNode)!;
+        var symbol        = operatorChild.Token.Text;
+        var operation     = ConvertToBinaryOperation(operatorChild.Description);
 
         operatorChild.Remove();
 
         return new(symbol, operation);
     }
 
-    static MathTreeNode ConvertToMathNode(GrammarTreeNode grammarTree)
+    static MathTreeNode ConvertToMathNode(GrammarTreeNode tree)
     {
-        var description = grammarTree.Symbol.Description;
+        if (tree is TerminalNode terminalNode)
+        {
+            if (terminalNode.Description == "number")
+                return ConvertToNumberNode(terminalNode);
+        }
+        else if (tree is NonterminalNode nonterminalNode)
+        {
+            if (nonterminalNode.Description == "binary operation")
+                return ConvertToBinaryOperatorNode(nonterminalNode);
+        }
 
-        if (description == "number")
-            return ConvertToNumberNode(grammarTree);
-
-        else if (description == "binary operation")
-            return ConvertToBinaryOperatorNode(grammarTree);
-
-        else
-            return new GroupNode();
+        return new GroupNode();
     }
 
+    // TODO: Rename to Convert
     public static MathTreeNode Build(GrammarTreeNode grammarTree)
     {
         var mathTree = ConvertToMathNode(grammarTree);

@@ -6,12 +6,12 @@ public sealed class GrammarTreeBuilder
 {
     public Grammar Grammar { get; }
 
-    readonly Stack<GrammarTreeNode> _processedNonterminalNodes = new();
+    readonly Stack<NonterminalNode> _processedNonterminalNodes = new();
 
-    Token[]                _tokens                    = Array.Empty<Token>();
-    Stack<Token>           _remainingTokens           = new();
-    int                    _furthestTokenIndexReached = -1;
-    int                    _subsequentNonTerminals    = 0;
+    Token[]      _tokens                    = Array.Empty<Token>();
+    Stack<Token> _remainingTokens           = new();
+    int          _furthestTokenIndexReached = -1;
+    int          _subsequentNonTerminals    = 0;
     
     public int MaxSubsequentNonTerminals { get; set; } = 3;
 
@@ -23,12 +23,12 @@ public sealed class GrammarTreeBuilder
             _furthestTokenIndexReached = furthestIndex;
     }
 
-    GrammarTreeNode? Build(TerminalSymbol terminal)
+    TerminalNode? Build(TerminalSymbol terminal)
     {
         if (_remainingTokens.Peek().Description == terminal.Description)
         {
             var token = _remainingTokens.Pop();
-            var tree  = new GrammarTreeNode(terminal, Grammar.Rules) { Token = token };
+            var tree  = new TerminalNode(token);
 
             EvaluateFurthestTokenReached();
             
@@ -40,15 +40,15 @@ public sealed class GrammarTreeBuilder
         return null;
     }
 
-    static ProductionRule? GetNextProductionRule(GrammarTreeNode tree)
+    static ProductionRule? GetNextProductionRule(NonterminalNode tree)
     {
         ProductionRule? rule = null;
 
-        while (tree.RemainingRules.Count > 0)
+        while (tree.Rules.Count > 0)
         {
-            rule = tree.RemainingRules.Dequeue();
+            rule = tree.Rules.Dequeue();
 
-            if (rule.Nonterminal == tree.Symbol)
+            if (rule.Nonterminal.Description == tree.Description)
                 break;
             else
                 rule = null;
@@ -57,7 +57,7 @@ public sealed class GrammarTreeBuilder
         return rule;
     }
 
-    bool ApplyRule(GrammarTreeNode tree, ProductionRule rule)
+    bool ApplyRule(NonterminalNode tree, ProductionRule rule)
     {
         if (rule.Replacement.Count > _remainingTokens.Count)
             return false;
@@ -84,7 +84,7 @@ public sealed class GrammarTreeBuilder
         return true;
     }
 
-    bool Build(GrammarTreeNode tree)
+    bool Build(NonterminalNode tree)
     {
         _subsequentNonTerminals += 1;
 
@@ -109,28 +109,28 @@ public sealed class GrammarTreeBuilder
         }
     }
 
+    NonterminalNode? Build(NonterminalSymbol nonterminal)
+    {
+        var tree = new NonterminalNode(nonterminal.Description, Grammar.Rules);
+
+        if (Build(tree))
+            return tree;
+        else
+            return null;
+    }
+
     GrammarTreeNode? Build(GrammarSymbol grammarSymbol)
     {
         if (grammarSymbol is TerminalSymbol terminal)
-        {
             return Build(terminal);
-        }
         else
-        {
-            var nonterminal = (grammarSymbol as NonterminalSymbol)!;
-            var tree        = new GrammarTreeNode(nonterminal, Grammar.Rules);
-
-            if (Build(tree))
-                return tree;
-            else
-                return null;
-        }
+            return Build((grammarSymbol as NonterminalSymbol)!);
     }
 
     void Discard(GrammarTreeNode tree)
     {
-        if (tree.Symbol is TerminalSymbol)
-            _remainingTokens.Push(tree.Token!);
+        if (tree is TerminalNode terminalNode)
+            _remainingTokens.Push(terminalNode.Token);
 
         tree.Remove();
     }
