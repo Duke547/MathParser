@@ -30,7 +30,7 @@ public static class Parser
         var tokens             = Lexer.Tokenize(expression, TokenPatterns.All);
         var grammarTreeBuilder = new GrammarTreeBuilder(DefineGrammar());
         var grammarTree        = grammarTreeBuilder.Build(tokens);
-        var mathTree           = MathTreeBuilder.Build(grammarTree);
+        var mathTree           = MathTreeConverter.Build(grammarTree);
 
         return mathTree.Value;
     }

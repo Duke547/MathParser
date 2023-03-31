@@ -2,8 +2,7 @@
 
 namespace MathParsing.MathTrees;
 
-// TODO: Rename to MathTreeConverter
-public static class MathTreeBuilder
+public static class MathTreeConverter
 {
     static NumberNode ConvertToNumberNode(GrammarTreeNode grammarNode)
     {
