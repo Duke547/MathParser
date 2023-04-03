@@ -45,14 +45,13 @@ public static class MathTreeConverter
         return new GroupNode();
     }
 
-    // TODO: Rename to Convert
-    public static MathTreeNode Build(GrammarTreeNode grammarTree)
+    public static MathTreeNode Convert(GrammarTreeNode grammarTree)
     {
         var mathTree = ConvertToMathNode(grammarTree);
 
         foreach (var child in grammarTree.Children)
         {
-            var branch = Build(child);
+            var branch = Convert(child);
             
             mathTree.AddChild(branch);
         }

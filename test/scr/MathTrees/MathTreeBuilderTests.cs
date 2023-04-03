@@ -44,7 +44,7 @@ public class MathTreeBuilderTests
     [Test]
     public void Build_Test()
     {
-        var tree = MathTreeConverter.Build(_grammarTree);
+        var tree = MathTreeConverter.Convert(_grammarTree);
 
         Assert.That(tree.Value, Is.EqualTo(6));
     }
