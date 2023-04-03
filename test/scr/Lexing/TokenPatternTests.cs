@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Lexing;
 
-public class TokenPatternTests
+internal class TokenPatternTests
 {
     [Test]
     public void Description_Test()

@@ -3,7 +3,7 @@ using MathParsing.Extensions;
 
 namespace MathParsing.Lexing;
 
-public static class Lexer
+internal static class Lexer
 {
     static Token? ConsumeNextToken(ref string expression, IEnumerable<TokenPattern> tokenPatterns)
     {

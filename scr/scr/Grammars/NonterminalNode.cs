@@ -4,7 +4,7 @@
 
 namespace MathParsing.Grammars;
 
-public class NonterminalNode : GrammarTreeNode
+internal class NonterminalNode : GrammarTreeNode
 {
     public override string Description { get; }
 

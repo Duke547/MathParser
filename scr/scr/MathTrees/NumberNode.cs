@@ -2,7 +2,7 @@
 
 namespace MathParsing.MathTrees;
 
-public sealed class NumberNode : MathTreeNode
+internal sealed class NumberNode : MathTreeNode
 {
     readonly decimal _value;
 

@@ -2,7 +2,7 @@
 
 namespace MathParsing.Grammars;
 
-public record struct Grammar
+internal record struct Grammar
 {
     public NonterminalSymbol Start{ get; }
 

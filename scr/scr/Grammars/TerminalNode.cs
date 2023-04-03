@@ -3,7 +3,7 @@ using MathParsing.Trees;
 
 namespace MathParsing.Grammars;
 
-public class TerminalNode : GrammarTreeNode
+internal class TerminalNode : GrammarTreeNode
 {
     public Token Token { get; init; }
 

@@ -2,7 +2,7 @@
 
 namespace MathParsing.Grammars;
 
-public sealed class GrammarTreeBuilder
+internal sealed class GrammarTreeBuilder
 {
     public Grammar Grammar { get; }
 

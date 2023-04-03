@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Trees;
 
-public class TreeNodeTests
+internal class TreeNodeTests
 {
     [Test]
     public void Value_Test()

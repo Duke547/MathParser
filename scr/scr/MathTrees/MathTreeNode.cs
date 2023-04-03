@@ -3,7 +3,7 @@ using MathParsing.Trees;
 
 namespace MathParsing.MathTrees;
 
-public abstract class MathTreeNode
+internal abstract class MathTreeNode
 {
     protected TreeNode<MathTreeNode> TreeNode { get; set; }
 

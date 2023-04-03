@@ -1,6 +1,6 @@
 ﻿namespace MathParsing.Trees;
 
-public sealed class UnaryTreeNode<T> : TreeNode<T>
+internal sealed class UnaryTreeNode<T> : TreeNode<T>
 {
     public TreeNode<T>? Child => Children.ElementAtOrDefault(0);
 

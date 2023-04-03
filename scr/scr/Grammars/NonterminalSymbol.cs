@@ -2,7 +2,7 @@
 
 namespace MathParsing.Grammars;
 
-public sealed record NonterminalSymbol : GrammarSymbol
+internal sealed record NonterminalSymbol : GrammarSymbol
 {
     [ExcludeFromCodeCoverage]
     public override string? ToString() => base.ToString();

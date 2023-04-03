@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Grammars;
 
-public class NonterminalNodeTests
+internal class NonterminalNodeTests
 {
     NonterminalNode  _node;
     ProductionRule[] _nodeRules;

@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.MathTrees;
 
-public class BinaryOperatorNodeTests
+internal class BinaryOperatorNodeTests
 {
     readonly Func<decimal, decimal, decimal> _operation = (l, r) => l + r;
     

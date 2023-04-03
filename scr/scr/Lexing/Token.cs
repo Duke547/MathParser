@@ -2,7 +2,7 @@
 
 namespace MathParsing.Lexing;
 
-public sealed record Token
+internal sealed record Token
 {
     public string Description { get; private set; }
 

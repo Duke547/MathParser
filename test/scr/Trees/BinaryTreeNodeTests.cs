@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Trees;
 
-public class BinaryTreeNodeTests
+internal class BinaryTreeNodeTests
 {
     [Test]
     public void LeftChild_Test()

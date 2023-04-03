@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MathParsing.Trees;
 
-public class TreeNode<T>
+internal class TreeNode<T>
 {
     readonly List<TreeNode<T>> _children = new();
 

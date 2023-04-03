@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.MathTrees;
 
-public class MathTreeBuilderTests
+internal class MathTreeBuilderTests
 {
     GrammarTreeNode _grammarTree;
 

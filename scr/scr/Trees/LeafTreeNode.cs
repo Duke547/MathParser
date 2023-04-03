@@ -1,6 +1,6 @@
 ﻿namespace MathParsing.Trees;
 
-public sealed class LeafTreeNode<T> : TreeNode<T>
+internal sealed class LeafTreeNode<T> : TreeNode<T>
 {
     public override bool Open => false;
 

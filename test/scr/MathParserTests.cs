@@ -2,7 +2,7 @@
 
 namespace MathParsing.Testing;
 
-public class MathParserTests
+internal class MathParserTests
 {
     [Test]
     public void Parse_Valid_Test()

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Grammars;
 
-public class GrammarSymbolTests
+internal class GrammarSymbolTests
 {
     GrammarSymbol _grammarSymbol;
 

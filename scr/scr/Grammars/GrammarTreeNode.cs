@@ -4,7 +4,7 @@ using MathParsing.Trees;
 
 namespace MathParsing.Grammars;
 
-public abstract class GrammarTreeNode
+internal abstract class GrammarTreeNode
 {
     protected TreeNode<GrammarTreeNode> TreeNode { get; set; }
 

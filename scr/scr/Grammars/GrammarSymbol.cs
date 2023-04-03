@@ -2,7 +2,7 @@
 
 namespace MathParsing.Grammars;
 
-public abstract record GrammarSymbol
+internal abstract record GrammarSymbol
 {
     public string Description { get; private set; }
 

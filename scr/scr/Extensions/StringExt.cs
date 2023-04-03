@@ -2,7 +2,7 @@
 
 namespace MathParsing.Extensions;
 
-public static class StringExt
+internal static class StringExt
 {
     public static string RemoveWhitespace(this string str)
     {

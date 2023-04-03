@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Grammars;
 
-public class GrammarTests
+internal class GrammarTests
 {
     Grammar                     _grammar;
     IEnumerable<ProductionRule> _rules = Array.Empty<ProductionRule>();

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Extensions;
 
-public class StringExtTests
+internal class StringExtTests
 {
     [Test]
     public void RemoveWhitespace_Test()

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.MathTrees;
 
-public class GroupNodeTests
+internal class GroupNodeTests
 {
     GroupNode _node;
 

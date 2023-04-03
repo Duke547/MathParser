@@ -3,7 +3,7 @@
 namespace MathParsing.MathTrees;
 
 // TODO: Test invalid grammar tree nodes.
-public static class MathTreeConverter
+internal static class MathTreeConverter
 {
     static NumberNode ConvertToNumberNode(TerminalNode terminalNode)
     {

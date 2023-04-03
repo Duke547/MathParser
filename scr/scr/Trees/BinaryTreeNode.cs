@@ -1,6 +1,6 @@
 ﻿namespace MathParsing.Trees;
 
-public sealed class BinaryTreeNode<T> : TreeNode<T>
+internal sealed class BinaryTreeNode<T> : TreeNode<T>
 {
     public TreeNode<T>? LeftChild => Children.ElementAtOrDefault(0);
 

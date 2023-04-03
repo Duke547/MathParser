@@ -2,7 +2,7 @@
 
 namespace MathParsing.MathTrees;
 
-public sealed class BinaryOperatorNode : MathTreeNode
+internal sealed class BinaryOperatorNode : MathTreeNode
 {
     new BinaryTreeNode<MathTreeNode> TreeNode => (base.TreeNode as BinaryTreeNode<MathTreeNode>)!;
 

@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Grammars;
 
-public class GrammarTreeNodeTests
+internal class GrammarTreeNodeTests
 {
     GrammarTreeNode _treeNode;
 

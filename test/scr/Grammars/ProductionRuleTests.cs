@@ -1,10 +1,9 @@
 ﻿using MathParsing.Grammars;
-using MathParsing.Lexing;
 using NUnit.Framework;
 
 namespace MathParsing.Testing.Grammars;
 
-public class ProductionRuleTests
+internal class ProductionRuleTests
 {
     ProductionRule  _productionRule;
     GrammarSymbol[] _replacement;

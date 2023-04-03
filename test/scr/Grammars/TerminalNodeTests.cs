@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace MathParsing.Testing.Grammars;
 
-public class TerminalNodeTests
+internal class TerminalNodeTests
 {
     TerminalNode _node;
 

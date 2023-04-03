@@ -4,7 +4,7 @@ using MathParsing.Extensions;
 
 namespace MathParsing.Grammars;
 
-public sealed record ProductionRule
+internal sealed record ProductionRule
 {
     public NonterminalSymbol Nonterminal { get; private set; }
 

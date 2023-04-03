@@ -2,7 +2,7 @@
 
 namespace MathParsing.MathTrees;
 
-public sealed class GroupNode : MathTreeNode
+internal sealed class GroupNode : MathTreeNode
 {
     new UnaryTreeNode<MathTreeNode> TreeNode => (base.TreeNode as UnaryTreeNode<MathTreeNode>)!;
 
