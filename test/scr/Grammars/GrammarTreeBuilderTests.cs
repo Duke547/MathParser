@@ -7,6 +7,7 @@ namespace MathParsing.Testing.Grammars;
 internal class GrammarTreeBuilderTests
 {
     GrammarTreeBuilder _builder;
+    Grammar            _grammar;
 
     static Grammar DefineGrammar()
     {
@@ -28,7 +29,14 @@ internal class GrammarTreeBuilderTests
     [SetUp]
     public void SetUp()
     {
-        _builder = new(DefineGrammar());
+        _grammar = DefineGrammar();
+        _builder = new(_grammar);
+    }
+
+    [Test]
+    public void Constructor_Test()
+    {
+        Assert.That(_builder.Grammar, Is.EqualTo(_grammar));
     }
 
     [Test]
