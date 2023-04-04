@@ -26,32 +26,36 @@ internal class GrammarTreeBuilderTests
         return new(expression, rules);
     }
 
+    static TokenPattern[] DefinePatterns()
+    {
+        return new TokenPattern[]
+        {
+            new("number",   @"\d*\.?\d+"),
+            new("addition", @"\+"       ),
+        };
+    }
+
     [SetUp]
     public void SetUp()
     {
         _grammar = DefineGrammar();
-        _builder = new(_grammar);
+        _builder = new(_grammar, DefinePatterns());
     }
 
     [Test]
     public void Constructor_Test()
     {
-        Assert.That(_builder.Grammar, Is.EqualTo(_grammar));
+        Assert.Multiple(() =>
+        {
+            Assert.That(_builder.Grammar,       Is.EqualTo(_grammar));
+            Assert.That(_builder.TokenPatterns, Is.EqualTo(DefinePatterns()));
+        });
     }
 
     [Test]
     public void Build_Test()
     {
-        var tokens = new Token[]
-        {
-            new("number",   "1"),
-            new("addition", "+"),
-            new("number",   "2"),
-            new("addition", "+"),
-            new("number",   "3")
-        };
-
-        var tree = _builder.Build(tokens);
+        var tree = _builder.Build("1 + 2 + 3");
 
         Assert.Multiple(() =>
         {
@@ -78,16 +82,7 @@ internal class GrammarTreeBuilderTests
     {
         _builder.Grammar.Rules.Reverse();
 
-        var tokens = new Token[]
-        {
-            new("number",   "1"),
-            new("addition", "+"),
-            new("number",   "2"),
-            new("addition", "+"),
-            new("number",   "3")
-        };
-
-        var tree = _builder.Build(tokens);
+        var tree = _builder.Build("1 + 2 + 3");
 
         Assert.Multiple(() =>
         {
@@ -120,43 +115,27 @@ internal class GrammarTreeBuilderTests
             new("addition", "+")
         };
 
-        Assert.That(() => _builder.Build(tokens), Throws.ArgumentException.With.Message.EqualTo("Unexpected token '+'."));
+        Assert.That(() => _builder.Build("1 + 2 +"), Throws.ArgumentException.With.Message.EqualTo("Unexpected token '+'."));
     }
 
     [Test]
     public void Build_UnknownToken_Test()
     {
-        var tokens = new Token[]
-        {
-            new("number",      "1"),
-            new("subtraction", "-"),
-            new("number",      "2"),
-        };
-
-        Assert.That(() => _builder.Build(tokens), Throws.ArgumentException.With.Message.EqualTo("Unexpected token '-'."));
+        Assert.That(() => _builder.Build("1 - 2"), Throws.ArgumentException.With.Message.EqualTo("Unrecognized symbol at '- 2'"));
     }
 
     [Test]
-    public void Build_NoTokens_Test()
+    public void Build_EmptyExpression_Test()
     {
-        var tokens = Array.Empty<Token>();
-
-        Assert.That(() => _builder.Build(tokens), Throws.Nothing);
+        Assert.That(() => _builder.Build(""), Throws.Nothing);
     }
 
     [Test]
     public void Build_NoRules_Test()
     {
-        var tokens = new Token[]
-        {
-            new("number",      "1"),
-            new("subtraction", "-"),
-            new("number",      "2"),
-        };
-
         _builder.Grammar.Rules.Clear();
 
-        Assert.That(() => _builder.Build(tokens), Throws.InvalidOperationException
+        Assert.That(() => _builder.Build("1 + 2"), Throws.InvalidOperationException
             .With.Message.EqualTo("The associated grammar does not define any production rules."));
     }
 }

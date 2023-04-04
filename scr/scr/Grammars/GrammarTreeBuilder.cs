@@ -1,10 +1,13 @@
-﻿using MathParsing.Lexing;
+﻿using System.Collections.Immutable;
+using MathParsing.Lexing;
 
 namespace MathParsing.Grammars;
 
 internal sealed class GrammarTreeBuilder
 {
     public Grammar Grammar { get; }
+
+    public ImmutableList<TokenPattern> TokenPatterns { get; }
 
     readonly Stack<NonterminalNode> _processedNonterminalNodes = new();
 
@@ -155,13 +158,13 @@ internal sealed class GrammarTreeBuilder
         }
     }
 
-    public GrammarTreeNode Build(IEnumerable<Token> tokens)
+    public GrammarTreeNode Build(string expression)
     {
         if (Grammar.Rules.Count == 0)
             throw new InvalidOperationException("The associated grammar does not define any production rules.");
 
-        _tokens          = tokens.ToArray();
-        _remainingTokens = new(tokens.Reverse());
+        _tokens          = Lexer.Tokenize(expression, TokenPatterns);
+        _remainingTokens = new(_tokens.Reverse());
 
         var tree = Build(Grammar.Start);
 
@@ -186,6 +189,9 @@ internal sealed class GrammarTreeBuilder
         return tree!;
     }
 
-    public GrammarTreeBuilder(Grammar grammar)
-        => Grammar = grammar;
+    public GrammarTreeBuilder(Grammar grammar, IEnumerable<TokenPattern> tokenPatterns)
+    {
+        Grammar       = grammar;
+        TokenPatterns = tokenPatterns.ToImmutableList();
+    }
 }

@@ -1,10 +1,39 @@
 ﻿using MathParsing.Grammars;
+using MathParsing.Lexing;
 
 namespace MathParsing.MathTrees;
 
-// TODO: Test invalid grammar tree nodes.
-internal static class MathTreeConverter
+internal static class MathTreeBuilder
 {
+    private static Grammar DefineGrammar()
+    {
+        var expression      = new NonterminalSymbol("expression"      );
+        var binaryOperation = new NonterminalSymbol("binary operation");
+        var number          = new TerminalSymbol   ("number"          );
+        var addition        = new TerminalSymbol   ("addition"        );
+        var multiplication  = new TerminalSymbol   ("multiplication"  );
+
+        var rules = new ProductionRule[]
+        {
+            new(expression,      new GrammarSymbol[] { number }),
+            new(expression,      new GrammarSymbol[] { binaryOperation }),
+            new(binaryOperation, new GrammarSymbol[] { expression, addition, expression }),
+            new(binaryOperation, new GrammarSymbol[] { expression, multiplication, expression })
+        };
+
+        return new(expression, rules);
+    }
+
+    private static TokenPattern[] DefinePatterns()
+    {
+        return new TokenPattern[]
+        {
+            new("number",         @"\d*\.?\d+"),
+            new("addition",       @"\+"       ),
+            new("multiplication", @"\*"       )
+        };
+    }
+
     static NumberNode ConvertToNumberNode(TerminalNode terminalNode)
     {
         var number = decimal.Parse(terminalNode.Token.Text);
@@ -45,17 +74,25 @@ internal static class MathTreeConverter
         return new GroupNode();
     }
 
-    public static MathTreeNode Convert(GrammarTreeNode grammarTree)
+    private static MathTreeNode Build(GrammarTreeNode grammarTree)
     {
         var mathTree = ConvertToMathNode(grammarTree);
 
         foreach (var child in grammarTree.Children)
         {
-            var branch = Convert(child);
-            
+            var branch = Build(child);
+
             mathTree.AddChild(branch);
         }
 
         return mathTree;
+    }
+
+    public static MathTreeNode Build(string expression)
+    {
+        var grammarTreeBuilder = new GrammarTreeBuilder(DefineGrammar(), DefinePatterns());
+        var grammarTree        = grammarTreeBuilder.Build(expression);
+        
+        return Build(grammarTree);
     }
 }
