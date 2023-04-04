@@ -26,6 +26,20 @@ internal sealed class GrammarTreeBuilder
             _furthestTokenIndexReached = furthestIndex;
     }
 
+    private void PushNonterminalNode(NonterminalNode nonterminalNode)
+    {
+        _processedNonterminalNodes.Push(nonterminalNode);
+        _subsequentNonTerminals++;
+    }
+
+    private NonterminalNode PopNonterminalNode()
+    {
+        if (_subsequentNonTerminals > 0)
+            _subsequentNonTerminals--;
+
+        return _processedNonterminalNodes.Pop();
+    }
+
     TerminalNode? Build(TerminalSymbol terminal)
     {
         if (_remainingTokens.Peek().Description == terminal.Description)
@@ -89,9 +103,7 @@ internal sealed class GrammarTreeBuilder
 
     bool Build(NonterminalNode tree)
     {
-        _subsequentNonTerminals += 1;
-
-        _processedNonterminalNodes.Push(tree);
+        PushNonterminalNode(tree);
 
         while (true)
         {
@@ -99,9 +111,7 @@ internal sealed class GrammarTreeBuilder
 
             if (rule is null)
             {
-                _subsequentNonTerminals--;
-                _processedNonterminalNodes.Pop();
-
+                PopNonterminalNode();
                 return false;
             }
 
@@ -173,7 +183,7 @@ internal sealed class GrammarTreeBuilder
 
         while (_remainingTokens.Count > 0)
         {
-            var lastNonterminalNode = _processedNonterminalNodes.Pop();
+            var lastNonterminalNode = PopNonterminalNode();
 
             DiscardChildren(lastNonterminalNode);
 
