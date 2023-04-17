@@ -5,94 +5,90 @@ namespace MathParsing.MathTrees;
 
 internal static class MathTreeBuilder
 {
-    private static Grammar DefineGrammar()
-    {
-        var expression      = new NonterminalSymbol("expression"      );
-        var binaryOperation = new NonterminalSymbol("binary operation");
-        var number          = new TerminalSymbol   ("number"          );
-        var addition        = new TerminalSymbol   ("addition"        );
-        var multiplication  = new TerminalSymbol   ("multiplication"  );
-
-        var rules = new ProductionRule[]
-        {
-            new(expression,      new GrammarSymbol[] { number }),
-            new(expression,      new GrammarSymbol[] { binaryOperation }),
-            new(binaryOperation, new GrammarSymbol[] { expression, addition, expression }),
-            new(binaryOperation, new GrammarSymbol[] { expression, multiplication, expression })
-        };
-
-        return new(expression, rules);
-    }
-
-    private static TokenPattern[] DefinePatterns()
+    private static TokenPattern[] DefineTokenPatterns()
     {
         return new TokenPattern[]
         {
-            new("number",         @"\d*\.?\d+"),
-            new("addition",       @"\+"       ),
-            new("multiplication", @"\*"       )
+            new("number",   @"\d*\.?\d+"),
+            new("add",      @"\+"       ),
+            new("multiply", @"\*"       )
         };
     }
 
-    static NumberNode ConvertToNumberNode(TerminalNode terminalNode)
+    private static Grammar DefineGrammar()
     {
-        var number = decimal.Parse(terminalNode.Token.Text);
+        var rules = new Rule[]
+        {
+            new("number",   true,  true,  new[] { "add", "multiply" }),
+            new("add",      false, false, new[] { "number"          }),
+            new("multiply", false, false, new[] { "number"          })
+        };
+
+        return new(rules);
+    }
+
+    private static NumberNode ConvertToNumberNode(Token token)
+    {
+        var number = decimal.Parse(token.Text);
 
         return new(number);
     }
 
-    static Func<decimal, decimal, decimal> ConvertToBinaryOperation(string description) => description switch
+    private static Func<decimal, decimal, decimal> ConvertToBinaryOperation(string description) => description switch
     {
-        "addition" => (l, r) => l + r,
-        _          => (l, r) => l * r,
+        "add" => (l, r) => l + r,
+        _     => (l, r) => l * r,
     };
 
-    static BinaryOperatorNode ConvertToBinaryOperatorNode(NonterminalNode nonterminalNode)
+    private static BinaryOperatorNode ConvertToBinaryOperatorNode(Token token)
     {
-        var operatorChild = (nonterminalNode.Children[1] as TerminalNode)!;
-        var symbol        = operatorChild.Token.Text;
-        var operation     = ConvertToBinaryOperation(operatorChild.Description);
-
-        operatorChild.Remove();
+        var symbol    = token.Text;
+        var operation = ConvertToBinaryOperation(token.Description);
 
         return new(symbol, operation);
     }
 
-    static MathTreeNode ConvertToMathNode(GrammarTreeNode tree)
+    private static MathTreeNode ConvertToMathNode(Token token)
     {
-        if (tree is TerminalNode terminalNode)
-        {
-            if (terminalNode.Description == "number")
-                return ConvertToNumberNode(terminalNode);
-        }
-        else if (tree is NonterminalNode nonterminalNode)
-        {
-            if (nonterminalNode.Description == "binary operation")
-                return ConvertToBinaryOperatorNode(nonterminalNode);
-        }
-
-        return new GroupNode();
+        if (token.Description == "number")
+            return ConvertToNumberNode(token);
+        else
+            return ConvertToBinaryOperatorNode(token);
     }
 
-    private static MathTreeNode Build(GrammarTreeNode grammarTree)
+    private static void Attach(MathTreeNode last, MathTreeNode next)
     {
-        var mathTree = ConvertToMathNode(grammarTree);
-
-        foreach (var child in grammarTree.Children)
+        if (last.IsOpen)
         {
-            var branch = Build(child);
-
-            mathTree.AddChild(branch);
+            last.AddChild(next);
         }
+        else
+        {
+            var lastParent = last.Parent!;
 
-        return mathTree;
+            last      .Remove();
+            lastParent.AddChild(next);
+            next      .AddChild(last);
+        }
     }
 
     public static MathTreeNode Build(string expression)
     {
-        var grammarTreeBuilder = new GrammarTreeBuilder(DefineGrammar(), DefinePatterns());
-        var grammarTree        = grammarTreeBuilder.Build(expression);
+        var tokens = Lexer.Tokenize(expression, DefineTokenPatterns());
         
-        return Build(grammarTree);
+        DefineGrammar().Validate(tokens);
+
+        MathTreeNode lastNode = new GroupNode();
+
+        foreach (var token in tokens)
+        {
+            var node = ConvertToMathNode(token);
+
+            Attach(lastNode, node);
+
+            lastNode = node;
+        }
+
+        return lastNode.Root;
     }
 }

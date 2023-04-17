@@ -46,6 +46,19 @@ internal class MathTreeNodeTests
     }
 
     [Test]
+    public void IsOpen_Test()
+    {
+        var node1 = new GroupNode();
+        var node2 = new NumberNode(5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(node1.IsOpen, Is.True );
+            Assert.That(node2.IsOpen, Is.False);
+        });
+    }
+
+    [Test]
     public void AddChild_Test()
     {
         var parent = new GroupNode();

@@ -24,7 +24,7 @@ internal class TreeNode<T>
         }
     }
 
-    public virtual bool Open => true;
+    public virtual bool IsOpen => true;
 
     public void AddChild(TreeNode<T> child)
     {
@@ -34,7 +34,7 @@ internal class TreeNode<T>
         if (child.Parent != null)
             throw new ArgumentException("child already has a parent.", nameof(child));
 
-        if (!Open)
+        if (!IsOpen)
             throw new InvalidOperationException($"This tree node cannot not have more than {Children.Count} children.");
 
         _children.Add(child);

@@ -1,4 +1,5 @@
-﻿using MathParsing.Trees;
+﻿using System.Diagnostics.CodeAnalysis;
+using MathParsing.Trees;
 
 namespace MathParsing.MathTrees;
 
@@ -24,6 +25,9 @@ internal sealed class BinaryOperatorNode : MathTreeNode
             return Operation(LeftChild.Value, RightChild.Value);
         }
     }
+
+    [ExcludeFromCodeCoverage]
+    public override string? ToString() => Symbol;
 
     public BinaryOperatorNode(string symbol, Func<decimal, decimal, decimal> operation)
     {

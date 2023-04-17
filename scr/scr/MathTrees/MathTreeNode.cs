@@ -18,8 +18,13 @@ internal abstract class MathTreeNode
 
     public abstract decimal Value { get; }
 
+    public bool IsOpen => TreeNode.IsOpen;
+
     public virtual void AddChild(MathTreeNode child)
         => TreeNode.AddChild(child.TreeNode);
+
+    public void Remove()
+        => TreeNode.Remove();
 
     public MathTreeNode() =>
         TreeNode = new(this);

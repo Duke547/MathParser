@@ -1,5 +1,4 @@
 ﻿using MathParsing.MathTrees;
-using MathParsing.Trees;
 using NUnit.Framework;
 
 namespace MathParsing.Testing.MathTrees;
