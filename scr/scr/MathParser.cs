@@ -32,7 +32,7 @@ public static class Parser
         var oper            = (tokens[index     ] as BinaryOperatorToken)!;
         var leftNumber      = (tokens[leftIndex ] as NumberToken        )!;
         var rightNumber     = (tokens[rightIndex] as NumberToken        )!;
-        var result          = oper.BinaryOperation(leftNumber.Value, rightNumber.Value);
+        var result          = oper.BinaryOperation.Operation(leftNumber.Value, rightNumber.Value);
 
         tokens.RemoveAt(rightIndex);
         tokens.RemoveAt(index     );
@@ -45,7 +45,12 @@ public static class Parser
     {
         while (tokens.OfType<BinaryOperatorToken>().Any())
         {
-            var binaryOperatorIndex = tokens.FindIndex(token => token is BinaryOperatorToken);
+            var highestPrecedence = tokens
+                .OfType<BinaryOperatorToken>()
+                .Max(token => token.Precedence);
+
+            var binaryOperatorIndex = tokens.FindIndex(token => token is BinaryOperatorToken binaryOperatorToken &&
+                                                                binaryOperatorToken.Precedence == highestPrecedence);
 
             CollapseBinaryOperator(tokens, binaryOperatorIndex);
         }

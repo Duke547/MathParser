@@ -1,20 +1,16 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace MathParsing;
+﻿namespace MathParsing;
 
 internal record BinaryOperatorToken : IMathToken
 {
-    public string Symbol { get; init; }
+    public BinaryOperation BinaryOperation { get; init; }
 
-    public Func<decimal, decimal, decimal> BinaryOperation { get; init; }
+    public string Symbol => BinaryOperation.Symbol;
 
-    [ExcludeFromCodeCoverage]
+    public int Precedence => BinaryOperation.Precedence;
+
     public override string ToString()
         => Symbol.ToString();
 
-    public BinaryOperatorToken(string symbol, Func<decimal, decimal, decimal> binaryOperation)
-    {
-        Symbol          = symbol;
-        BinaryOperation = binaryOperation;
-    }
+    public BinaryOperatorToken(BinaryOperation binaryOperation)
+        => BinaryOperation = binaryOperation;
 }

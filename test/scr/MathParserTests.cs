@@ -7,10 +7,33 @@ internal class MathParserTests
     [Test]
     public void Parse_Valid_Test()
     {
-        var expression = "1 * 2 + 3";
-        var expected   = 5m;
+        var expressions = new string[]
+        {
+            "1 + 2 + 3",
+            "1 + 2 * 3",
+            "3 * 2 + 1",
+            "1+2+3"
+        };
 
-        Assert.That(Parser.Parse(expression), Is.EqualTo(expected));
+        var expectedResults = new decimal[]
+        {
+            6,
+            7,
+            7,
+            6
+        };
+
+        Assert.Multiple(() =>
+        {
+            for (int i = 0; i < expressions.Length; i++)
+            {
+                var expression     = expressions[i];
+                var expectedResult = expectedResults[i];
+                
+                Assert.That(() => { var result = Parser.Parse(expression); }, Throws.Nothing, $"{expression}");
+                Assert.That(Parser.Parse(expression), Is.EqualTo(expectedResult), $"{expression}");
+            }
+        });
     }
 
     [Test]

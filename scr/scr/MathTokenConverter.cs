@@ -18,13 +18,13 @@ internal static class MathTokenConverter
         }
     }
 
-    private static Func<decimal, decimal, decimal> ConvertToBinaryOperation(string symbol)
+    private static BinaryOperation ConvertToBinaryOperation(string symbol)
     {
         if (symbol == "+")
-            return (l, r) => l + r;
+            return new(symbol, (l, r) => l + r, 0);
 
         if (symbol == "*")
-            return (l, r) => l * r;
+            return new(symbol, (l, r) => l * r, 1);
 
         throw new ArgumentException($"'{symbol}' does not represent a known binary operator.");
     }
@@ -33,7 +33,7 @@ internal static class MathTokenConverter
     {
         var operation = ConvertToBinaryOperation(token.Text);
 
-        return new(token.Text, operation);
+        return new(operation);
     }
 
     public static IMathToken Convert(Token token)
