@@ -7,8 +7,8 @@ internal class MathParserTests
     [Test]
     public void Parse_Valid_Test()
     {
-        var expression = "1 + 2 * 3";
-        var expected   = 7m;
+        var expression = "1 * 2 + 3";
+        var expected   = 5m;
 
         Assert.That(Parser.Parse(expression), Is.EqualTo(expected));
     }
