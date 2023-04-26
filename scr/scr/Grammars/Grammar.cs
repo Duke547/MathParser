@@ -14,7 +14,7 @@ internal sealed record Grammar
             var index     = Array.IndexOf(tokens.ToArray(), token);
             var position  = token.Position;
             var text      = token.Text;
-            var rule      = Rules.Find(r => r.Token == token.Description);
+            var rule      = Rules.Find(r => r.Token == token.Subset || r.Token == token.Description);
             var nextToken = tokens.ElementAtOrDefault(index + 1);
 
             if (rule is null)
@@ -23,7 +23,8 @@ internal sealed record Grammar
             if ((index == 0 && !rule.CanStart) || (nextToken is null && !rule.CanEnd))
                 throw new IndexedTokenException(text, position, $"Unexpected token '{text}' at position {position}.");
 
-            if (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Description))
+            if (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Subset)
+                                      && !rule.Adjacents.Select(a => a).Contains(nextToken.Description))
             {
                 var nextText     = nextToken.Text;
                 var nextPosition = nextToken.Position;
