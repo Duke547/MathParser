@@ -1,11 +1,12 @@
-﻿using NUnit.Framework;
+﻿using MathParsing.Grammars;
+using NUnit.Framework;
 
 namespace MathParsing.Testing;
 
 internal class MathParserTests
 {
     [Test]
-    public void Parse_Valid_Test()
+    public void Parse_Valid_Tests()
     {
         var expressions = new string[]
         {
@@ -49,11 +50,59 @@ internal class MathParserTests
     }
 
     [Test]
-    public void Parse_Invalid_Test()
+    public void Parse_InvalidToken_Tests()
     {
-        var expression = "1 + 1 &";
+        var expressions = new[]
+        {
+            "1 + 1 &",
+            "1 + + 1",
+            "1 + 1 +",
+            "1 + 1 1",
+            "+ 1"
+        };
 
-        Assert.That(() => Parser.Parse(expression), Throws.ArgumentException.With.Message.EqualTo("Unrecognized symbol at '&'"));
+        var expectedMessages = new[]
+        {
+            "Unrecognized token '&' at position 6.",
+            "Unexpected token '+' at position 4.",
+            "Unexpected token '+' at position 6.",
+            "Unexpected token '1' at position 6.",
+            "Unexpected token '+' at position 0.",
+        };
+
+        var expectedTokens = new[]
+        {
+            "&",
+            "+",
+            "+",
+            "1",
+            "+",
+        };
+
+        var expectedPositions = new[]
+        {
+            6,
+            4,
+            6,
+            6,
+            0,
+        };
+
+        Assert.Multiple(() =>
+        {
+            for (int i = 0; i < expressions.Length; i++)
+            {
+                var expression    = expressions           [i];
+                var message       = expectedMessages      [i];
+                var token         = expectedTokens        [i];
+                var position      = expectedPositions     [i];
+
+                Assert.That(() => Parser.Parse(expression), Throws.TypeOf<IndexedTokenException>()
+                    .With.Message             .EqualTo(message)
+                    .And .Property("Token"   ).EqualTo(token)
+                    .And .Property("Position").EqualTo(position), expression);
+            }
+        });
     }
 
     [Test]

@@ -20,11 +20,15 @@ internal sealed record Grammar
             if (rule is null)
                 throw new IndexedTokenException(text, position, $"Undefined token '{text}' at position {position}.");
 
-            if ((index == 0 && !rule.CanStart)      ||
-                (nextToken is null && !rule.CanEnd) ||
-                (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Description)))
-            {
+            if ((index == 0 && !rule.CanStart) || (nextToken is null && !rule.CanEnd))
                 throw new IndexedTokenException(text, position, $"Unexpected token '{text}' at position {position}.");
+
+            if (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Description))
+            {
+                var nextText     = nextToken.Text;
+                var nextPosition = nextToken.Position;
+
+                throw new IndexedTokenException(nextText, nextPosition, $"Unexpected token '{nextText}' at position {nextPosition}.");
             }
         }
     }

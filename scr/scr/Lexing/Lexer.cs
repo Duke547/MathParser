@@ -1,40 +1,44 @@
 ﻿using System.Text.RegularExpressions;
 using MathParsing.Extensions;
+using MathParsing.Grammars;
 
 namespace MathParsing.Lexing;
 
 internal static class Lexer
 {
-    static Token? ConsumeNextToken(ref string expression, IEnumerable<TokenPattern> tokenPatterns)
+    static Token ConsumeNextToken(string expression, ref int currentIndex, IEnumerable<TokenPattern> tokenPatterns)
     {
         foreach (var tokenPattern in tokenPatterns)
         {
             var whitespacePattern = @"\s*";
-            var match = Regex.Match(expression, $"{whitespacePattern}{tokenPattern.Pattern}{whitespacePattern}");
+            var match             = Regex.Match(expression.Substring(currentIndex), $"{whitespacePattern}{tokenPattern.Pattern}{whitespacePattern}");
+            var matchIndex        = match.Index;
 
-            if (match.Success && match.Index == 0)
+            if (match.Success && matchIndex == 0)
             {
-                expression = expression.Substring(match.Length);
+                var token = new Token(tokenPattern.Description, tokenPattern.Subset, match.Value.RemoveWhitespace(), currentIndex);
 
-                return new Token(tokenPattern.Description, tokenPattern.Subset, match.Value.RemoveWhitespace(), match.Index);
+                currentIndex += match.Length;
+
+                return token;
             }
         }
 
-        return null;
+        var unrecognizedToken = expression.Substring(currentIndex, 1);
+
+        throw new IndexedTokenException(unrecognizedToken, currentIndex, $"Unrecognized token '{unrecognizedToken}' at position {currentIndex}.");
     }
 
     public static Token[] Tokenize(string expression, IEnumerable<TokenPattern> tokenPatterns)
     {
-        var tokens = new List<Token>();
+        var tokens       = new List<Token>();
+        var currentIndex = 0;
 
-        while (expression.Length > 0)
+        while (currentIndex < expression.Length)
         {
-            var token = ConsumeNextToken(ref expression, tokenPatterns);
+            var token = ConsumeNextToken(expression, ref currentIndex, tokenPatterns);
 
-            if (token != null)
-                tokens.Add(token);
-            else
-                throw new ArgumentException($"Unrecognized symbol at '{expression}'");
+            tokens.Add(token);
         }
 
         return tokens.ToArray();
