@@ -12,20 +12,20 @@ internal sealed record Grammar
         foreach (var token in tokens)
         {
             var index     = Array.IndexOf(tokens.ToArray(), token);
+            var position  = token.Position;
+            var text      = token.Text;
             var rule      = Rules.Find(r => r.Token == token.Description);
             var nextToken = tokens.ElementAtOrDefault(index + 1);
 
             if (rule is null)
-                throw new UndefinedTokenException(token.Text);
+                throw new IndexedTokenException(text, position, $"Undefined token '{text}' at position {position}.");
 
-            if (index == 0 && !rule.CanStart)
-                throw new UnexpectedTokenException(token.Text);
-
-            if (nextToken is null && !rule.CanEnd)
-                throw new UnexpectedTokenException(token.Text);
-
-            if (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Description))
-                throw new UnexpectedTokenException(token.Text);
+            if ((index == 0 && !rule.CanStart)      ||
+                (nextToken is null && !rule.CanEnd) ||
+                (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Description)))
+            {
+                throw new IndexedTokenException(text, position, $"Unexpected token '{text}' at position {position}.");
+            }
         }
     }
 

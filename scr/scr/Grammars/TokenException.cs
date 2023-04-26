@@ -1,6 +1,6 @@
 ﻿namespace MathParsing.Grammars;
 
-internal class TokenException : Exception
+public class TokenException : Exception
 {
     public string Token { get; private set; }
 

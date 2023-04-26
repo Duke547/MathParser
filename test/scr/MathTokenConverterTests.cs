@@ -8,7 +8,7 @@ internal class MathTokenConverterTests
     [Test]
     public void Convert_InvalidNumberToken_Test()
     {
-        var token = new Token("number", "a");
+        var token = new Token("number", "a", 0);
 
         Assert.That(() => MathTokenConverter.Convert(token),
             Throws.ArgumentException.With.Message.EqualTo("'a' does not represent a number."));
@@ -17,7 +17,7 @@ internal class MathTokenConverterTests
     [Test]
     public void Convert_InvalidBinaryOperatorToken_Test()
     {
-        var token = new Token("binary operator", "#");
+        var token = new Token("binary operator", "#", 0);
 
         Assert.That(() => MathTokenConverter.Convert(token),
             Throws.ArgumentException.With.Message.EqualTo("'#' does not represent a known binary operator."));

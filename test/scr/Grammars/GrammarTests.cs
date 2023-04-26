@@ -42,47 +42,42 @@ internal class GrammarTests
     }
 
     [Test]
-    public void Validate_Test()
+    public void Validate_UndefinedToken_Test()
     {
         var tokens = new Token[]
         {
-            new("B", "B"),
-            new("A", "A"),
-            new("C", "C")
-        };
-        
-        Assert.That(() => _grammar.Validate(tokens), Throws.Nothing);
-    }
-
-    [Test]
-    public void Validate_UnDefinedToken_Test()
-    {
-        var tokens = new Token[]
-        {
-            new("D", "D"),
+            new("D", "D", 0),
         };
 
-        Assert.That(() => _grammar.Validate(tokens), Throws.TypeOf<UndefinedTokenException>()
-            .With.Message.EqualTo("Undefined token 'D'."));
+        Assert.That(() => _grammar.Validate(tokens), Throws.TypeOf<IndexedTokenException>()
+            .With.Message             .EqualTo("Undefined token 'D' at position 0.")
+            .And .Property("Token")   .EqualTo("D")
+            .And .Property("Position").EqualTo(0));
     }
 
     [Test]
     public void Validate_UnexpectedTokens_Test()
     {
-        var token1 = new Token("A", "A");
-        var token2 = new Token("B", "B");
-        var token3 = new Token("C", "C");
+        var token1 = new Token("A", "A", 0);
+        var token2 = new Token("B", "B", 1);
+        var token3 = new Token("C", "C", 2);
 
         Assert.Multiple(() =>
         {
-            Assert.That(() => _grammar.Validate(new[] { token2 }), Throws.TypeOf<UnexpectedTokenException>()
-                .With.Message.EqualTo("Unexpected token 'B'."));
+            Assert.That(() => _grammar.Validate(new[] { token2 }), Throws.TypeOf<IndexedTokenException>()
+            .With.Message             .EqualTo("Unexpected token 'B' at position 1.")
+            .And .Property("Token")   .EqualTo("B")
+            .And .Property("Position").EqualTo(1));
 
-            Assert.That(() => _grammar.Validate(new[] { token3 }), Throws.TypeOf<UnexpectedTokenException>()
-                .With.Message.EqualTo("Unexpected token 'C'."));
+            Assert.That(() => _grammar.Validate(new[] { token3 }), Throws.TypeOf<IndexedTokenException>()
+            .With.Message             .EqualTo("Unexpected token 'C' at position 2.")
+            .And .Property("Token")   .EqualTo("C")
+            .And .Property("Position").EqualTo(2));
 
-            Assert.That(() => _grammar.Validate(new[] { token2, token3, token3 }), Throws.TypeOf<UnexpectedTokenException>()
-                .With.Message.EqualTo("Unexpected token 'C'."));
+            Assert.That(() => _grammar.Validate(new[] { token2, token3, token3 }), Throws.TypeOf<IndexedTokenException>()
+            .With.Message             .EqualTo("Unexpected token 'C' at position 2.")
+            .And .Property("Token")   .EqualTo("C")
+            .And .Property("Position").EqualTo(2));
         });
     }
 }
