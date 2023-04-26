@@ -17,7 +17,7 @@ internal class MathTokenConverterTests
     [Test]
     public void Convert_InvalidBinaryOperatorToken_Test()
     {
-        var token = new Token("binary operator", "#", 0);
+        var token = new Token("", "binary operator", "#", 0);
 
         Assert.That(() => MathTokenConverter.Convert(token),
             Throws.ArgumentException.With.Message.EqualTo("'#' does not represent a known binary operator."));

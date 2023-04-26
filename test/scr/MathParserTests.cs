@@ -21,6 +21,12 @@ internal class MathParserTests
             "5 / 2",
             "5 ÷ 2",
             "5 % 4",
+            "3 * (2 + 1)",
+            "(3 * 2) + 1",
+            "(3 * 2) + (1 + 3)",
+            "()",
+            "(5)",
+            "((5))",
         };
 
         var expectedResults = new decimal[]
@@ -35,7 +41,13 @@ internal class MathParserTests
              6.0m,
              2.5m,
              2.5m,
-             1.0m
+             1.0m,
+             9.0m,
+             7.0m,
+            10.0m,
+             0.0m,
+             5.0m,
+             5.0m,
         };
 
         Assert.Multiple(() =>
@@ -52,7 +64,7 @@ internal class MathParserTests
     }
 
     [Test]
-    public void Parse_InvalidToken_Tests()
+    public void Parse_Invalid_Tests()
     {
         var expressions = new[]
         {
@@ -60,7 +72,24 @@ internal class MathParserTests
             "1 + + 1",
             "1 + 1 +",
             "1 + 1 1",
-            "+ 1"
+            "+ 1",
+            "(1 + 1",
+            "1 + 1)",
+            "(+ 1)",
+            "(1 +)",
+        };
+
+        var expectedExceptionTypes = new[]
+        {
+            typeof(IndexedTokenException),
+            typeof(IndexedTokenException),
+            typeof(IndexedTokenException),
+            typeof(IndexedTokenException),
+            typeof(IndexedTokenException),
+            typeof(InvalidOperationException),
+            typeof(InvalidOperationException),
+            typeof(IndexedTokenException),
+            typeof(IndexedTokenException),
         };
 
         var expectedMessages = new[]
@@ -70,6 +99,10 @@ internal class MathParserTests
             "Unexpected token '+' at position 6.",
             "Unexpected token '1' at position 6.",
             "Unexpected token '+' at position 0.",
+            "Missing ')'.",
+            "Missing '('.",
+            "Unexpected token '+' at position 1.",
+            "Unexpected token ')' at position 4.",
         };
 
         var expectedTokens = new[]
@@ -79,15 +112,23 @@ internal class MathParserTests
             "+",
             "1",
             "+",
+            null,
+            null,
+            "+",
+            ")",
         };
 
-        var expectedPositions = new[]
+        var expectedPositions = new int?[]
         {
             6,
             4,
             6,
             6,
             0,
+            null,
+            null,
+            1,
+            4,
         };
 
         Assert.Multiple(() =>
@@ -95,14 +136,23 @@ internal class MathParserTests
             for (int i = 0; i < expressions.Length; i++)
             {
                 var expression    = expressions           [i];
+                var exceptionType = expectedExceptionTypes[i];
                 var message       = expectedMessages      [i];
                 var token         = expectedTokens        [i];
                 var position      = expectedPositions     [i];
 
-                Assert.That(() => Parser.Parse(expression), Throws.TypeOf<IndexedTokenException>()
-                    .With.Message             .EqualTo(message)
-                    .And .Property("Token"   ).EqualTo(token)
-                    .And .Property("Position").EqualTo(position), expression);
+                if (exceptionType == typeof(IndexedTokenException))
+                {
+                    Assert.That(() => Parser.Parse(expression), Throws.TypeOf<IndexedTokenException>()
+                        .With.Message             .EqualTo(message)
+                        .And .Property("Token"   ).EqualTo(token)
+                        .And .Property("Position").EqualTo(position), expression);
+                }
+                else
+                {
+                    Assert.That(() => Parser.Parse(expression), Throws.TypeOf<InvalidOperationException>()
+                        .With.Message.EqualTo(message), expression);
+                }
             }
         });
     }

@@ -48,12 +48,23 @@ internal static class MathTokenConverter
         return new(operation);
     }
 
+    private static BracketToken ConvertToBracketToken(Token token)
+    {
+        if (token.Subset == "left bracket")
+            return new(true);
+        else
+            return new(false);
+    }
+
     public static IMathToken Convert(Token token)
     {
         if (token.Description == "number")
             return ConvertToNumberToken(token);
         
-        return ConvertToBinaryOperatorToken(token);
+        if (token.Subset == "binary operator")
+            return ConvertToBinaryOperatorToken(token);
+
+        return ConvertToBracketToken(token);
     }
 
     public static IMathToken[] Convert(IEnumerable<Token> tokens)
