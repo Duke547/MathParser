@@ -10,6 +10,7 @@ internal class MathParserTests
     {
         var expressions = new string[]
         {
+            "",
             "1 + 2 + 3",
             "1 + 2 * 3",
             "3 * 2 + 1",
@@ -24,6 +25,7 @@ internal class MathParserTests
 
         var expectedResults = new decimal[]
         {
+             0.0m,
              6.0m,
              7.0m,
              7.0m,

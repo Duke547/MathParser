@@ -64,7 +64,10 @@ public static class Parser
     {
         CollapseBinaryOperators(tokens);
 
-        return (tokens[0] as NumberToken)!.Value;
+        if (tokens.Count == 0)
+            return 0;
+        else
+            return (tokens[0] as NumberToken)!.Value;
     }
 
     public static decimal Parse(string expression)
