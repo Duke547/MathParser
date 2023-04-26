@@ -21,12 +21,22 @@ internal static class MathTokenConverter
     private static BinaryOperation ConvertToBinaryOperation(Token token)
     {
         var symbol = token.Text;
+        var subset = token.Subset;
 
-        if (token.Subset == "add")
+        if (subset == "add")
             return new(symbol, (l, r) => l + r, 0);
 
-        if (token.Subset == "multiply")
+        if (subset == "subtract")
+            return new(symbol, (l, r) => l - r, 0);
+
+        if (subset == "multiply")
             return new(symbol, (l, r) => l * r, 1);
+
+        if (subset == "divide")
+            return new(symbol, (l, r) => l / r, 1);
+
+        if (subset == "remainder")
+            return new(symbol, (l, r) => l % r, 1);
 
         throw new ArgumentException($"'{symbol}' does not represent a known binary operator.");
     }

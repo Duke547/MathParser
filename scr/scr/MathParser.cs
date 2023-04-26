@@ -9,9 +9,12 @@ public static class Parser
     {
         return new TokenPattern[]
         {
-            new("number",          "",         @"\d*\.?\d+"),
-            new("binary operator", "add",      @"\+"       ),
-            new("binary operator", "multiply", @"\*"       ),
+            new("number",          "",          @"\d*\.?\d+"),
+            new("binary operator", "add",       @"\+"       ),
+            new("binary operator", "subtract",  @"\-"       ),
+            new("binary operator", "multiply",  @"[\*\×\∙]" ),
+            new("binary operator", "divide",    @"[\/\÷]"   ),
+            new("binary operator", "remainder", @"[\%]"     ),
         };
     }
 
