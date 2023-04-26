@@ -9,9 +9,8 @@ internal static class MathTreeBuilder
     {
         return new TokenPattern[]
         {
-            new("number",   @"\d*\.?\d+"),
-            new("add",      @"\+"       ),
-            new("multiply", @"\*"       )
+            new("number",          @"\d*\.?\d+"),
+            new("binary operator", @"[+*]"     ),
         };
     }
 
@@ -19,9 +18,8 @@ internal static class MathTreeBuilder
     {
         var rules = new Rule[]
         {
-            new("number",   true,  true,  new[] { "add", "multiply" }),
-            new("add",      false, false, new[] { "number"          }),
-            new("multiply", false, false, new[] { "number"          })
+            new("number",          true,  true,  new[] { "binary operator" }),
+            new("binary operator", false, false, new[] { "number"          }),
         };
 
         return new(rules);
@@ -34,16 +32,16 @@ internal static class MathTreeBuilder
         return new(number);
     }
 
-    private static Func<decimal, decimal, decimal> ConvertToBinaryOperation(string description) => description switch
+    private static Func<decimal, decimal, decimal> ConvertToBinaryOperation(Token token) => token.Text switch
     {
-        "add" => (l, r) => l + r,
-        _     => (l, r) => l * r,
+        "+" => (l, r) => l + r,
+        _   => (l, r) => l * r,
     };
 
     private static BinaryOperatorNode ConvertToBinaryOperatorNode(Token token)
     {
         var symbol    = token.Text;
-        var operation = ConvertToBinaryOperation(token.Description);
+        var operation = ConvertToBinaryOperation(token);
 
         return new(symbol, operation);
     }
