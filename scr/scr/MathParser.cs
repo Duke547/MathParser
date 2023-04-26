@@ -25,46 +25,49 @@ public static class Parser
         return new(rules);
     }
 
-    private static Func<decimal, decimal, decimal> ConvertToBinaryOperation(Token token) => token.Text switch
-    {
-        "+" => (l, r) => l + r,
-        _   => (l, r) => l * r,
-    };
-
-    private static void CollapseBinaryOperator(List<Token> tokens, int index)
+    private static void CollapseBinaryOperator(List<IMathToken> tokens, int index)
     {
         var leftIndex       = index - 1;
         var rightIndex      = index + 1;
-        var oper            = tokens[index];
-        var leftValue       = int.Parse(tokens[leftIndex] .Text);
-        var rightValue      = int.Parse(tokens[rightIndex].Text);
-        var binaryOperation = ConvertToBinaryOperation(oper);
-        var result          = binaryOperation(leftValue, rightValue);
+        var oper            = (tokens[index     ] as BinaryOperatorToken)!;
+        var leftNumber      = (tokens[leftIndex ] as NumberToken        )!;
+        var rightNumber     = (tokens[rightIndex] as NumberToken        )!;
+        var result          = oper.BinaryOperation(leftNumber.Value, rightNumber.Value);
 
         tokens.RemoveAt(rightIndex);
-        tokens.RemoveAt(index);
-        tokens.RemoveAt(leftIndex);
-        tokens.Insert(leftIndex, new("number", result.ToString()));
+        tokens.RemoveAt(index     );
+        tokens.RemoveAt(leftIndex );
+        
+        tokens.Insert(leftIndex, new NumberToken(result));
     }
 
-    private static void CollapseBinaryOperators(List<Token> tokens)
+    private static void CollapseBinaryOperators(List<IMathToken> tokens)
     {
-        while (tokens.Exists(t => t.Description == "binary operator"))
+        while (tokens.OfType<BinaryOperatorToken>().Any())
         {
-            var binaryOperatorIndex = tokens.FindIndex(t => t.Description == "binary operator");
+            var binaryOperatorIndex = tokens.FindIndex(token => token is BinaryOperatorToken);
 
             CollapseBinaryOperator(tokens, binaryOperatorIndex);
         }
     }
 
-    public static decimal Parse(string expression)
+    private static decimal Collapse(List<IMathToken> tokens)
     {
-        var tokens = Lexer.Tokenize(expression, DefineTokenPatterns()).ToList();
-
-        DefineGrammar().Validate(tokens);
-
         CollapseBinaryOperators(tokens);
 
-        return int.Parse(tokens[0].Text);
+        return (tokens[0] as NumberToken)!.Value;
+    }
+
+    public static decimal Parse(string expression)
+    {
+        var tokens  = Lexer.Tokenize(expression, DefineTokenPatterns()).ToList();
+        var grammar = DefineGrammar();
+
+        grammar.Validate(tokens);
+
+        var mathTokens = MathTokenConverter.Convert(tokens)
+                                           .ToList();
+
+        return Collapse(mathTokens);
     }
 }
