@@ -18,12 +18,14 @@ internal static class MathTokenConverter
         }
     }
 
-    private static BinaryOperation ConvertToBinaryOperation(string symbol)
+    private static BinaryOperation ConvertToBinaryOperation(Token token)
     {
-        if (symbol == "+")
+        var symbol = token.Text;
+
+        if (token.Subset == "add")
             return new(symbol, (l, r) => l + r, 0);
 
-        if (symbol == "*")
+        if (token.Subset == "multiply")
             return new(symbol, (l, r) => l * r, 1);
 
         throw new ArgumentException($"'{symbol}' does not represent a known binary operator.");
@@ -31,7 +33,7 @@ internal static class MathTokenConverter
 
     private static BinaryOperatorToken ConvertToBinaryOperatorToken(Token token)
     {
-        var operation = ConvertToBinaryOperation(token.Text);
+        var operation = ConvertToBinaryOperation(token);
 
         return new(operation);
     }

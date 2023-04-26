@@ -16,7 +16,7 @@ internal static class Lexer
             {
                 expression = expression.Substring(match.Length);
 
-                return new Token(tokenPattern.Description, match.Value.RemoveWhitespace());
+                return new Token(tokenPattern.Description, tokenPattern.Subset, match.Value.RemoveWhitespace());
             }
         }
 
