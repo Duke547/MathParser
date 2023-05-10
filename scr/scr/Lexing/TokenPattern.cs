@@ -19,7 +19,4 @@ internal sealed record TokenPattern
         Subset      = subset;
         Pattern     = pattern;
     }
-
-    public TokenPattern(string type, string pattern)
-        : this(type, "", pattern) { }
 }

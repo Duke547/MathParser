@@ -6,33 +6,17 @@ namespace MathParsing.Testing.Lexing;
 internal class TokenPatternTests
 {
     [Test]
-    public void Description_Test()
-    {
-        var description  = "D";
-        var tokenPattern = new TokenPattern(description, "P");
-        
-        Assert.That(tokenPattern.Description, Is.EqualTo(description));
-    }
-
-    [Test]
-    public void Pattern_Test()
-    {
-        var pattern      = "P";
-        var tokenPattern = new TokenPattern("D", pattern);
-
-        Assert.That(tokenPattern.Pattern, Is.EqualTo(pattern));
-    }
-
-    [Test]
     public void Constructor_Test()
     {
-        var pattern      = "P";
-        var description  = "D";
-        var tokenPattern = new TokenPattern(description, pattern);
+        var description  = "A";
+        var subset       = "B";
+        var pattern      = "C";
+        var tokenPattern = new TokenPattern(description, subset, pattern);
 
         Assert.Multiple(() =>
         {
             Assert.That(tokenPattern.Description, Is.EqualTo(description), "Descripton");
+            Assert.That(tokenPattern.Subset,      Is.EqualTo(subset     ), "Descripton");
             Assert.That(tokenPattern.Pattern,     Is.EqualTo(pattern    ), "Pattern"   );
         });
     }
