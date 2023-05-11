@@ -46,7 +46,7 @@ internal class GrammarTests
     {
         var tokens = new Token[]
         {
-            new("D", "D", 0),
+            new("D", "D", "D", 0),
         };
 
         Assert.That(() => _grammar.Validate(tokens), Throws.TypeOf<IndexedTokenException>()
@@ -58,9 +58,9 @@ internal class GrammarTests
     [Test]
     public void Validate_UnexpectedTokens_Test()
     {
-        var token1 = new Token("A", "A", 0);
-        var token2 = new Token("B", "B", 1);
-        var token3 = new Token("C", "C", 2);
+        var token1 = new Token("A", "A", "A", 0);
+        var token2 = new Token("B", "B", "B", 1);
+        var token3 = new Token("C", "C", "C", 2);
 
         Assert.Multiple(() =>
         {

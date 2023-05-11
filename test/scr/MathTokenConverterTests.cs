@@ -9,7 +9,7 @@ internal class MathTokenConverterTests
     [Test]
     public void Convert_InvalidNumberToken_Test()
     {
-        var token = new Token("number", "a", 0);
+        var token = new Token("number", "number", "a", 0);
 
         Assert.That(() => MathTokenConverter.Convert(token), Throws.TypeOf<TokenException>()
             .With.Message.EqualTo("'a' does not represent a number.")

@@ -22,7 +22,4 @@ internal sealed record Token
         Text        = text;
         Position    = position;
     }
-
-    public Token(string description, string text, int position)
-        : this(description, "", text, position) { }
 }
