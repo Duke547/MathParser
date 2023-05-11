@@ -15,6 +15,18 @@ internal class StringExtTests
     }
 
     [Test]
+    public void RemoveFirst_Tests()
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That("ABC".RemoveFirst("AB"),   Is.EqualTo("C"),   "Remove AB from ABC."  );
+            Assert.That("ABC".RemoveFirst("AC"),   Is.EqualTo("ABC"), "Remove AC from ABC."  );
+            Assert.That("ABC".RemoveFirst("C"),    Is.EqualTo("AB"),  "Remove C from ABC."   );
+            Assert.That("ABC".RemoveFirst("ABCD"), Is.EqualTo("ABC"), "Remove ABCD from ABC.");
+        });
+    }
+
+    [Test]
     public void FromList_Test()
     {
         var input    = new int[] { 1, 2, 3 };

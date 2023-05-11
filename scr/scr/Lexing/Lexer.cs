@@ -6,41 +6,72 @@ namespace MathParsing.Lexing;
 
 internal static class Lexer
 {
-    static Token ConsumeNextToken(string expression, ref int currentIndex, IEnumerable<TokenPattern> tokenPatterns)
+    private static string ConcatenatePatterns(IEnumerable<TokenPattern> tokenPatterns)
     {
+        var pattern = "";
+
         foreach (var tokenPattern in tokenPatterns)
         {
-            var whitespacePattern = @"\s*";
-            var match             = Regex.Match(expression.Substring(currentIndex), $"{whitespacePattern}{tokenPattern.Pattern}{whitespacePattern}");
-            var matchIndex        = match.Index;
+            if (pattern != "")
+                pattern += "|";
 
-            if (match.Success && matchIndex == 0)
-            {
-                var token = new Token(tokenPattern.Description, tokenPattern.Subset, match.Value.RemoveWhitespace(), currentIndex);
+            var desc = tokenPattern.Description.Replace(" ", "_");
 
-                currentIndex += match.Length;
-
-                return token;
-            }
+            pattern += $"(?'{desc}'{tokenPattern.Pattern})";
         }
 
-        var unrecognizedToken = expression.Substring(currentIndex, 1);
-
-        throw new IndexedTokenException(unrecognizedToken, currentIndex, $"Unrecognized token '{unrecognizedToken}' at position {currentIndex}.");
+        return pattern;
     }
 
-    public static Token[] Tokenize(string expression, IEnumerable<TokenPattern> tokenPatterns)
+    private static string RemoveMatches(string expression, MatchCollection matches)
     {
-        var tokens       = new List<Token>();
-        var currentIndex = 0;
+        foreach (var match in matches.Cast<Match>())
+            expression = expression.RemoveFirst(match.Value);
 
-        while (currentIndex < expression.Length)
+        return expression;
+    }
+
+    private static void Validate(string expression, MatchCollection matches)
+    {
+        var remaining = RemoveMatches(expression, matches).RemoveWhitespace();
+
+        if (remaining != "")
         {
-            var token = ConsumeNextToken(expression, ref currentIndex, tokenPatterns);
+            var unmatchedToken = remaining.Substring(0, 1);
+            var unmatchedIndex = expression.IndexOf(remaining);
 
-            tokens.Add(token);
+            throw new IndexedTokenException(unmatchedToken, unmatchedIndex, $"Unrecognized token '{unmatchedToken}' at position {unmatchedIndex}.");
+        }
+    }
+
+    private static Token[] ConvertToTokens(MatchCollection matches, IEnumerable<TokenPattern> tokenPatterns)
+    {
+        var tokens = new List<Token>();
+
+        foreach (var match in matches.Cast<Match>())
+        {
+            var description = match.Groups.Values.First(m => m.Success && m.Name != "0"  ).Name.Replace('_', ' ');
+            var subset      = tokenPatterns      .First(p => p.Description == description).Subset;
+
+            tokens.Add(new(description, subset, match.Value, match.Index));
         }
 
         return tokens.ToArray();
+    }
+
+    /// <summary>
+    /// Converts the expression into a collection of lexical tokens based on the given token patterns.
+    /// </summary>
+    /// <param name="expression">The expression to convert.</param>
+    /// <param name="tokenPatterns">The token patterns to use for conversion.</param>
+    /// <returns>The collection of tokens extracted from the given expression.</returns>
+    public static Token[] Tokenize(string expression, IEnumerable<TokenPattern> tokenPatterns)
+    {
+        var pattern = ConcatenatePatterns(tokenPatterns);
+        var matches = Regex.Matches(expression, pattern);
+
+        Validate(expression, matches);
+
+        return ConvertToTokens(matches, tokenPatterns);
     }
 }

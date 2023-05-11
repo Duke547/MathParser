@@ -17,6 +17,26 @@ internal static class StringExt
         return newString;
     }
 
+    /// <summary>
+    /// Removes the first occurance of the specified substring.
+    /// </summary>
+    /// <param name="str">The current string.</param>
+    /// <param name="substring">The substring to remove.</param>
+    /// <returns>A new string with the first occurance of the specified substring removed.</returns>
+    public static string RemoveFirst(this string str, string substring)
+    {
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (i + substring.Length > str.Length)
+                break;
+
+            if (str.Substring(i, substring.Length) == substring)
+                return str.Remove(i, substring.Length);
+        }
+
+        return str;
+    }
+
     public static string FromList(IList list)
     {
         var str = "";
