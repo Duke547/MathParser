@@ -13,7 +13,7 @@ internal sealed record Token
     public int Position { get; init; }
 
     [ExcludeFromCodeCoverage]
-    public override string? ToString() => $"{Text}";
+    public override string ToString() => $"{Text}";
 
     public Token(string description, string subset, string text, int position)
     {

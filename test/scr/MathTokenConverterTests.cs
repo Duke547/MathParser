@@ -1,4 +1,5 @@
-﻿using MathParsing.Lexing;
+﻿using MathParsing.Grammars;
+using MathParsing.Lexing;
 using NUnit.Framework;
 
 namespace MathParsing.Testing;
@@ -10,8 +11,9 @@ internal class MathTokenConverterTests
     {
         var token = new Token("number", "a", 0);
 
-        Assert.That(() => MathTokenConverter.Convert(token),
-            Throws.ArgumentException.With.Message.EqualTo("'a' does not represent a number."));
+        Assert.That(() => MathTokenConverter.Convert(token), Throws.TypeOf<TokenException>()
+            .With.Message.EqualTo("'a' does not represent a number.")
+            .And.Property("Token").EqualTo("a"));
     }
 
     [Test]
@@ -19,7 +21,8 @@ internal class MathTokenConverterTests
     {
         var token = new Token("", "binary operator", "#", 0);
 
-        Assert.That(() => MathTokenConverter.Convert(token),
-            Throws.ArgumentException.With.Message.EqualTo("'#' does not represent a known binary operator."));
+        Assert.That(() => MathTokenConverter.Convert(token), Throws.TypeOf<TokenException>()
+            .With.Message.EqualTo("'#' does not represent a known binary operator.")
+            .And.Property("Token").EqualTo("#"));
     }
 }

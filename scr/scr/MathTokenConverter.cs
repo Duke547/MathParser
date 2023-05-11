@@ -1,4 +1,5 @@
-﻿using MathParsing.Lexing;
+﻿using MathParsing.Grammars;
+using MathParsing.Lexing;
 
 namespace MathParsing;
 
@@ -14,7 +15,7 @@ internal static class MathTokenConverter
         }
         catch (FormatException exception)
         {
-            throw new ArgumentException($"'{token}' does not represent a number.", exception);
+            throw new TokenException(token.ToString(), $"'{token}' does not represent a number.", exception);
         }
     }
 
@@ -38,7 +39,7 @@ internal static class MathTokenConverter
         if (description == "remainder")
             return new(symbol, (l, r) => l % r, 1);
 
-        throw new ArgumentException($"'{symbol}' does not represent a known binary operator.");
+        throw new TokenException(symbol, $"'{symbol}' does not represent a known binary operator.");
     }
 
     private static BinaryOperatorToken ConvertToBinaryOperatorToken(Token token)

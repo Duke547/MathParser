@@ -6,4 +6,7 @@ public class TokenException : Exception
 
     public TokenException(string token, string? message) : base(message)
         => Token = token;
+
+    public TokenException(string token, string? message, Exception? innerException) : base(message, innerException)
+        => Token = token;
 }
