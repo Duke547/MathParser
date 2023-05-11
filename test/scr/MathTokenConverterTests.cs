@@ -7,6 +7,16 @@ namespace MathParsing.Testing;
 internal class MathTokenConverterTests
 {
     [Test]
+    public void Convert_InvalidToken_Test()
+    {
+        var token = new Token("unknown", "unknown", "a", 0);
+
+        Assert.That(() => MathTokenConverter.Convert(token), Throws.TypeOf<TokenException>()
+            .With.Message.EqualTo("Unrecognized unknown 'a'.")
+            .And.Property("Token").EqualTo("a"));
+    }
+
+    [Test]
     public void Convert_InvalidNumberToken_Test()
     {
         var token = new Token("number", "number", "a", 0);

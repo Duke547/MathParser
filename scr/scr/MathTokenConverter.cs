@@ -65,7 +65,10 @@ internal static class MathTokenConverter
         if (token.Subset == "binary operator")
             return ConvertToBinaryOperatorToken(token);
 
-        return ConvertToBracketToken(token);
+        if (token.Subset.Contains("bracket"))
+            return ConvertToBracketToken(token);
+
+        throw new TokenException(token.ToString(), $"Unrecognized {token.Subset} '{token}'.");
     }
 
     public static IMathToken[] Convert(IEnumerable<Token> tokens)
