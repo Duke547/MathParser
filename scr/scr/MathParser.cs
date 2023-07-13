@@ -9,14 +9,14 @@ public static class Parser
     {
         return new TokenPattern[]
         {
-            new("number",            "",                @"\d*\.?\d+"),
-            new("add",               "binary operator", @"\+"       ),
-            new("subtract",          "binary operator", @"\-"       ),
-            new("multiply",          "binary operator", @"[\*\×\∙]" ),
-            new("divide",            "binary operator", @"[\/\÷]"   ),
-            new("remainder",         "binary operator", @"[\%]"     ),
-            new("left parenthesis",  "left bracket",    @"[\(]"     ),
-            new("right parenthesis", "right bracket",   @"[\)]"     ),
+            new("number",            "",              @"\d*\.?\d+"),
+            new("plus",              "operator",      @"\+"       ),
+            new("minus",             "operator",      @"\-"       ),
+            new("multiply",          "operator",      @"[\*\×\∙]" ),
+            new("divide",            "operator",      @"[\/\÷]"   ),
+            new("remainder",         "operator",      @"[\%]"     ),
+            new("left parenthesis",  "left bracket",  @"[\(]"     ),
+            new("right parenthesis", "right bracket", @"[\)]"     ),
         };
     }
 
@@ -24,10 +24,10 @@ public static class Parser
     {
         var rules = new Rule[]
         {
-            new("number",          true,  true,  new[] { "binary operator", "right bracket"       }),
-            new("binary operator", false, false, new[] { "number", "left bracket"                 }),
-            new("left bracket",    true,  false, new[] { "number", "left bracket", "right bracket"}),
-            new("right bracket",   false, true,  new[] { "binary operator", "right bracket"       }),
+            new("number",          true,  true,  new[] { "operator", "right bracket"                          }),
+            new("operator",        true,  false, new[] { "number", "left bracket"                             }),
+            new("left bracket",    true,  false, new[] { "number", "left bracket", "right bracket", "operator"}),
+            new("right bracket",   false, true,  new[] { "operator", "right bracket"                          }),
         };
 
         return new(rules);
@@ -87,6 +87,29 @@ public static class Parser
         }
     }
 
+    private static void CollapseUnaryOperator(List<IMathToken> tokens, int index)
+    {
+        var rightIndex      = index + 1;
+        var oper            = (tokens[index     ] as UnaryOperatorToken)!;
+        var rightNumber     = (tokens[rightIndex] as NumberToken       )!;
+        var result          = oper.UnaryOperation.Operation(rightNumber.Value);
+
+        tokens.RemoveAt(rightIndex);
+        tokens.RemoveAt(index);
+
+        tokens.Insert(index, new NumberToken(result));
+    }
+
+    private static void CollapseUnaryOperators(List<IMathToken> tokens)
+    {
+        while (tokens.OfType<UnaryOperatorToken>().Any())
+        {
+            var opIndex = tokens.FindIndex(token => token is UnaryOperatorToken);
+
+            CollapseUnaryOperator(tokens, opIndex);
+        }
+    }
+
     private static void CollapseBinaryOperator(List<IMathToken> tokens, int index)
     {
         var leftIndex       = index - 1;
@@ -120,7 +143,8 @@ public static class Parser
 
     private static decimal Collapse(List<IMathToken> tokens)
     {
-        CollapseBrackets(tokens);
+        CollapseBrackets       (tokens);
+        CollapseUnaryOperators (tokens);
         CollapseBinaryOperators(tokens);
 
         if (tokens.Count == 0)

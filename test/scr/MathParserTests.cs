@@ -35,6 +35,12 @@ internal class MathParserTests
             TestValidExpression("()",                 0.0m);
             TestValidExpression("(5)",                5.0m);
             TestValidExpression("((5))",              5.0m);
+            TestValidExpression("-1",                -1.0m);
+            TestValidExpression("- 2 + 2",            0.0m);
+            TestValidExpression(" -(2 + 2)",         -4.0m);
+            TestValidExpression("(  +2 + 2)",         4.0m);
+            TestValidExpression("+(2 + 2)",           4.0m);
+            TestValidExpression("1 + 2 + (- ( -3))",  6.0m);
         });
     }
 
@@ -65,11 +71,11 @@ internal class MathParserTests
             TestInvalidExpression("1 + + 1", typeof(TokenException),        "Unexpected token '+'.",   "+");
             TestInvalidExpression("1 + 1 +", typeof(TokenException),        "Unexpected token '+'.",   "+");
             TestInvalidExpression("1 + 1 1", typeof(TokenException),        "Unexpected token '1'.",   "1");
-            TestInvalidExpression("+ 1",     typeof(TokenException),        "Unexpected token '+'.",   "+");
             TestInvalidExpression("(1 + 1",  typeof(MissingTokenException), "Missing ')'.",            ")");
             TestInvalidExpression("1 + 1)",  typeof(MissingTokenException), "Missing '('.",            "(");
-            TestInvalidExpression("(+ 1)",   typeof(TokenException),        "Unexpected token '+'.",   "+");
             TestInvalidExpression("(1 +)",   typeof(TokenException),        "Unexpected token ')'.",   ")");
+            TestInvalidExpression("1 +",     typeof(TokenException),        "Unexpected token '+'.",   "+");
+            TestInvalidExpression("1+-2",    typeof(TokenException),        "Unexpected token '-'.",   "-");
         });
     }
 

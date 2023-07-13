@@ -19,15 +19,15 @@ internal static class MathTokenConverter
         }
     }
 
-    private static BinaryOperation ConvertToBinaryOperation(Token token)
+    private static BinaryOperation GetBinaryOperation(Token token)
     {
         var symbol      = token.Text;
         var description = token.Description;
 
-        if (description == "add")
+        if (description == "plus")
             return new(symbol, (l, r) => l + r, 0);
 
-        if (description == "subtract")
+        if (description == "minus")
             return new(symbol, (l, r) => l - r, 0);
 
         if (description == "multiply")
@@ -42,12 +42,37 @@ internal static class MathTokenConverter
         throw new TokenException(symbol, $"'{symbol}' does not represent a known binary operator.");
     }
 
+    private static UnaryOperation GetUnaryOperation(Token token)
+    {
+        var symbol      = token.Text;
+        var description = token.Description;
+
+        if (description == "plus")
+            return new(symbol, (v) => v);
+
+        if (description == "minus")
+            return new(symbol, (v) => -v);
+
+        throw new TokenException(symbol, $"'{symbol}' does not represent a known unary operator.");
+    }
+
+    static IMathToken ConvertToOperatorToken(Token token, Token? previous)
+    {
+        if (previous?.Description == "number" || previous?.Subset == "right bracket")
+            return ConvertToBinaryOperatorToken(token);
+        else
+            return ConvertToUnaryOperatorToken(token);
+    }
+
     private static BinaryOperatorToken ConvertToBinaryOperatorToken(Token token)
     {
-        var operation = ConvertToBinaryOperation(token);
+        var operation = GetBinaryOperation(token);
 
         return new(operation);
     }
+
+    private static UnaryOperatorToken ConvertToUnaryOperatorToken(Token token)
+        => new(GetUnaryOperation(token));
 
     private static BracketToken ConvertToBracketToken(Token token)
     {
@@ -57,13 +82,13 @@ internal static class MathTokenConverter
             return new(false);
     }
 
-    public static IMathToken Convert(Token token)
+    public static IMathToken Convert(Token token, Token? previous)
     {
         if (token.Description == "number")
             return ConvertToNumberToken(token);
-        
-        if (token.Subset == "binary operator")
-            return ConvertToBinaryOperatorToken(token);
+
+        if (token.Subset == "operator")
+            return ConvertToOperatorToken(token, previous);
 
         if (token.Subset.Contains("bracket"))
             return ConvertToBracketToken(token);
@@ -73,7 +98,16 @@ internal static class MathTokenConverter
 
     public static IMathToken[] Convert(IEnumerable<Token> tokens)
     {
-        return tokens.Select(token => Convert(token))
-                     .ToArray();
+        var    mathTokens = new List<IMathToken>();
+        Token? previous   = null;
+
+        foreach (var token in tokens)
+        {
+            mathTokens.Add(Convert(token, previous));
+
+            previous = token;
+        }
+
+        return mathTokens.ToArray();
     }
 }
