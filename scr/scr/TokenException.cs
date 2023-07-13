@@ -1,4 +1,4 @@
-﻿namespace MathParsing.Grammars;
+﻿namespace MathParsing;
 
 public class TokenException : Exception
 {

@@ -1,8 +1,6 @@
-﻿using MathParsing.Grammars;
-using MathParsing.Lexing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
-namespace MathParsing.Testing.Grammars;
+namespace MathParsing.Testing;
 
 internal class TokenExceptionTests
 {

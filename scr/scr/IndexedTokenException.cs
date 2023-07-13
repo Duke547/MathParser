@@ -1,5 +1,4 @@
-﻿namespace MathParsing.Grammars;
-
+﻿namespace MathParsing;
 public class IndexedTokenException : TokenException
 {
     public int Position { get; init; }
