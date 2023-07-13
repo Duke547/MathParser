@@ -10,16 +10,13 @@ internal sealed record Token
 
     public string Text { get; private set; }
 
-    public int Position { get; init; }
-
     [ExcludeFromCodeCoverage]
     public override string ToString() => $"{Text}";
 
-    public Token(string description, string subset, string text, int position)
+    public Token(string description, string subset, string text)
     {
         Description = description;
         Subset      = subset;
         Text        = text;
-        Position    = position;
     }
 }

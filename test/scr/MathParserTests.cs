@@ -39,23 +39,14 @@ internal class MathParserTests
     }
 
     private static void TestInvalidExpression(string  expression,    Type expectedExceptionType, string expectedMessage,
-                                              string? expectedToken, int? expectedPosition)
+                                              string? expectedToken)
     {
-        if (expectedExceptionType == typeof(IndexedTokenException))
+        if (expectedExceptionType == typeof(TokenException))
         {
             Assert.That(() => Parser.Parse(expression), Throws
                 .TypeOf(expectedExceptionType)
                 .With.Message             .EqualTo(expectedMessage)
-                .And .Property("Token"   ).EqualTo(expectedToken)
-                .And .Property("Position").EqualTo(expectedPosition), expression);
-        }
-
-        else if (expectedExceptionType.IsSubclassOf(typeof(TokenException)))
-        {
-            Assert.That(() => Parser.Parse(expression), Throws
-                .TypeOf(expectedExceptionType)
-                .With.Message          .EqualTo(expectedMessage)
-                .And .Property("Token").EqualTo(expectedToken  ));
+                .And .Property("Token"   ).EqualTo(expectedToken), expression);
         }
 
         else
@@ -70,15 +61,15 @@ internal class MathParserTests
     {
         Assert.Multiple(() =>
         {
-            TestInvalidExpression("1 + 1 &", typeof(IndexedTokenException),     "Unrecognized token '&' at position 6.", "&",  6  );
-            TestInvalidExpression("1 + + 1", typeof(IndexedTokenException),     "Unexpected token '+' at position 4.",   "+",  4  );
-            TestInvalidExpression("1 + 1 +", typeof(IndexedTokenException),     "Unexpected token '+' at position 6.",   "+",  6  );
-            TestInvalidExpression("1 + 1 1", typeof(IndexedTokenException),     "Unexpected token '1' at position 6.",   "1",  6  );
-            TestInvalidExpression("+ 1",     typeof(IndexedTokenException),     "Unexpected token '+' at position 0.",   "+",  0  );
-            TestInvalidExpression("(1 + 1",  typeof(MissingTokenException),     "Missing ')'.",                          ")", null);
-            TestInvalidExpression("1 + 1)",  typeof(MissingTokenException),     "Missing '('.",                          "(", null);
-            TestInvalidExpression("(+ 1)",   typeof(IndexedTokenException),     "Unexpected token '+' at position 1.",   "+",  1  );
-            TestInvalidExpression("(1 +)",   typeof(IndexedTokenException),     "Unexpected token ')' at position 4.",   ")",  4  );
+            TestInvalidExpression("1 + 1 &", typeof(TokenException),        "Unrecognized token '&'.", "&");
+            TestInvalidExpression("1 + + 1", typeof(TokenException),        "Unexpected token '+'.",   "+");
+            TestInvalidExpression("1 + 1 +", typeof(TokenException),        "Unexpected token '+'.",   "+");
+            TestInvalidExpression("1 + 1 1", typeof(TokenException),        "Unexpected token '1'.",   "1");
+            TestInvalidExpression("+ 1",     typeof(TokenException),        "Unexpected token '+'.",   "+");
+            TestInvalidExpression("(1 + 1",  typeof(MissingTokenException), "Missing ')'.",            ")");
+            TestInvalidExpression("1 + 1)",  typeof(MissingTokenException), "Missing '('.",            "(");
+            TestInvalidExpression("(+ 1)",   typeof(TokenException),        "Unexpected token '+'.",   "+");
+            TestInvalidExpression("(1 +)",   typeof(TokenException),        "Unexpected token ')'.",   ")");
         });
     }
 

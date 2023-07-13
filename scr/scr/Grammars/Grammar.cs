@@ -7,29 +7,27 @@ internal sealed record Grammar
 {
     public ImmutableList<Rule> Rules { get; private set; }
 
-    public void Validate(IEnumerable<Token> tokens)
+    public void Validate(IList<Token> tokens)
     {
-        foreach (var token in tokens)
+        for (int i = 0; i < tokens.Count; i++)
         {
-            var index     = Array.IndexOf(tokens.ToArray(), token);
-            var position  = token.Position;
+            var token     = tokens[i];
             var text      = token.Text;
             var rule      = Rules.Find(r => r.Token == token.Subset || r.Token == token.Description);
-            var nextToken = tokens.ElementAtOrDefault(index + 1);
+            var nextToken = tokens.ElementAtOrDefault(i + 1);
 
             if (rule is null)
-                throw new IndexedTokenException(text, position, $"Undefined token '{text}' at position {position}.");
+                throw new TokenException(text, $"Undefined token '{text}'.");
 
-            if ((index == 0 && !rule.CanStart) || (nextToken is null && !rule.CanEnd))
-                throw new IndexedTokenException(text, position, $"Unexpected token '{text}' at position {position}.");
+            if ((i == 0 && !rule.CanStart) || (nextToken is null && !rule.CanEnd))
+                throw new TokenException(text, $"Unexpected token '{text}'.");
 
             if (nextToken is not null && !rule.Adjacents.Select(a => a).Contains(nextToken.Subset)
                                       && !rule.Adjacents.Select(a => a).Contains(nextToken.Description))
             {
-                var nextText     = nextToken.Text;
-                var nextPosition = nextToken.Position;
+                var nextTokenText = nextToken.Text;
 
-                throw new IndexedTokenException(nextText, nextPosition, $"Unexpected token '{nextText}' at position {nextPosition}.");
+                throw new TokenException(nextTokenText, $"Unexpected token '{nextTokenText}'.");
             }
         }
     }

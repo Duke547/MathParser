@@ -33,14 +33,13 @@ internal static class Lexer
 
     private static void Validate(string expression, MatchCollection matches)
     {
-        var remaining = RemoveMatches(expression, matches).RemoveWhitespace();
+        var remaining = RemoveMatches(expression.RemoveWhitespace(), matches);
 
         if (remaining != "")
         {
             var unmatchedToken = remaining.Substring(0, 1);
-            var unmatchedIndex = expression.IndexOf(remaining);
 
-            throw new IndexedTokenException(unmatchedToken, unmatchedIndex, $"Unrecognized token '{unmatchedToken}' at position {unmatchedIndex}.");
+            throw new TokenException(unmatchedToken, $"Unrecognized token '{unmatchedToken}'.");
         }
     }
 
@@ -53,7 +52,7 @@ internal static class Lexer
             var description = match.Groups.Values.First(m => m.Success && m.Name != "0"  ).Name.Replace('_', ' ');
             var subset      = tokenPatterns      .First(p => p.Description == description).Subset;
 
-            tokens.Add(new(description, subset, match.Value, match.Index));
+            tokens.Add(new(description, subset, match.Value));
         }
 
         return tokens.ToArray();

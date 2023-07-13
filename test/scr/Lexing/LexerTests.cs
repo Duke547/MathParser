@@ -1,5 +1,4 @@
-﻿using MathParsing.Grammars;
-using MathParsing.Lexing;
+﻿using MathParsing.Lexing;
 using NUnit.Framework;
 
 namespace MathParsing.Testing.Lexing;
@@ -20,9 +19,9 @@ internal class LexerTests
 
         var expectedTokens = new []
         {
-            new Token("number", "number",          "1", 1),
-            new Token("add",    "binary operator", "+", 3),
-            new Token("number", "number",          "2", 4)
+            new Token("number", "number",          "1"),
+            new Token("add",    "binary operator", "+"),
+            new Token("number", "number",          "2")
         };
 
         Assert.That(tokens, Is.EquivalentTo(expectedTokens));
@@ -37,8 +36,8 @@ internal class LexerTests
         };
 
         var expression      = "1 + 2";
-        var expectedMessage = "Unrecognized token '+' at position 2.";
+        var expectedMessage = "Unrecognized token '+'.";
 
-        Assert.That(() => Lexer.Tokenize(expression, patterns), Throws.TypeOf<IndexedTokenException>().With.Message.EqualTo(expectedMessage));
+        Assert.That(() => Lexer.Tokenize(expression, patterns), Throws.TypeOf<TokenException>().With.Message.EqualTo(expectedMessage));
     }
 }
