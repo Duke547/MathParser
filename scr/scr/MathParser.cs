@@ -61,7 +61,7 @@ public static class Parser
             }
         }
 
-        throw new InvalidOperationException("Missing ')'.");
+        throw new MissingTokenException(")");
     }
 
     private static void CollapseBrackets(List<IMathToken> tokens, int index)
@@ -81,7 +81,7 @@ public static class Parser
             var bracketIndex = tokens.FindIndex(token => token is BracketToken bracketToken && bracketToken.Left);
 
             if (bracketIndex == -1)
-                throw new InvalidOperationException("Missing '('.");
+                throw new MissingTokenException("(");
 
             CollapseBrackets(tokens, bracketIndex);
         }
